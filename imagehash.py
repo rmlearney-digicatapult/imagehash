@@ -522,7 +522,7 @@ def _find_all_segments(pixels, segment_threshold, min_segment_size):
 	img_width, img_height = pixels.shape
 	# threshold pixels
 	threshold_pixels = pixels > segment_threshold
-	unassigned_pixels = numpy.full(pixels.shape, True, dtype=numpy.bool)
+	unassigned_pixels = numpy.full(pixels.shape, True, dtype=bool)
 
 	segments = []
 	already_segmented = set()
