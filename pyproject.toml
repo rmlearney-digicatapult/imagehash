@@ -1,0 +1,12 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+
+[project]
+
+dependencies = [
+    "six >= 1.0",
+    "pillow >= 8.0",
+    "numpy >= 1.0",
+    "scipy >= 1.5",
+    "PyWavelets >= 1.0",
+]
