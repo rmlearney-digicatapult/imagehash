@@ -11,7 +11,7 @@ An image hashing library written in Python. ImageHash supports:
 * HSV color hashing (colorhash)
 * Crop-resistant hashing
 
-|Travis|_ |Coveralls|_
+|CI|_ |Coveralls|_ 
 
 Rationale
 =========
@@ -154,8 +154,8 @@ Other projects
 * https://github.com/thorn-oss/perception (based on imagehash code, depends on opencv)
 * https://docs.opencv.org/3.4/d4/d93/group__img__hash.html
 
-.. |Travis| image:: https://travis-ci.com/JohannesBuchner/imagehash.svg?branch=master
-.. _Travis: https://travis-ci.com/JohannesBuchner/imagehash
+.. |CI| image:: https://github.com/JohannesBuchner/imagehash/actions/workflows/testing.yml/badge.svg
+.. _CI: https://github.com/JohannesBuchner/imagehash/actions/workflows/testing.yml
 
 .. |Coveralls| image:: https://coveralls.io/repos/github/JohannesBuchner/imagehash/badge.svg
 .. _Coveralls: https://coveralls.io/github/JohannesBuchner/imagehash

@@ -35,7 +35,7 @@ from PIL import Image, ImageFilter
 import numpy
 #import scipy.fftpack
 #import pywt
-__version__ = "4.1.0"
+__version__ = "4.2.0"
 
 """
 You may copy this file, if you keep the copyright information below:
