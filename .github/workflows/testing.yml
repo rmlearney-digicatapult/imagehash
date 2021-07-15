@@ -34,4 +34,4 @@ jobs:
           flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
       - run: python setup.py install
       - run: coverage run -m pytest .
-      - run: COVERALLS_REPO_TOKEN=amEQ4sldJtlrG3RzjGVD32EYrjUIj4YCV3 coveralls
+      - run: COVERALLS_REPO_TOKEN=mEQ4sldJtlrG3RzjGVD32EYrjUIj4YCV3 coveralls
