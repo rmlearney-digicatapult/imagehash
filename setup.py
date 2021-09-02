@@ -19,7 +19,7 @@ setup(
     data_files=[('images', ['tests/data/imagehash.png'])],
     scripts=['find_similar_images.py'],
     url='https://github.com/JohannesBuchner/imagehash',
-    license='BSD 2-clause (see LICENSE file)',
+    license='2-clause BSD License',
     description='Image Hashing library',
     long_description=long_description,
     long_description_content_type='text/x-rst',
