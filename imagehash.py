@@ -145,6 +145,19 @@ def hex_to_flathash(hexstr, hashsize):
 	hash_array = numpy.array([[bool(int(d)) for d in binary_array]])[-hash_size * hashsize:]
 	return ImageHash(hash_array)
 
+def hex_to_multihash(hexstr):
+	"""
+	Convert a stored multihash (hex, as retrieved from str(ImageMultiHash))
+	back to an ImageMultiHash object. 
+	
+	This function is based on hex_to_hash so the same caveats apply.
+	
+	
+	"""
+    	hexstr = hexstr.replace('"', '')
+    	split = hexstr.split(',')
+    	hashes = [imagehash.hex_to_hash(x) for x in split]
+    	return imagehash.ImageMultiHash(hashes)
 
 
 def old_hex_to_hash(hexstr, hash_size=8):
