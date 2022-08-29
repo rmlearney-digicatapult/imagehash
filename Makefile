@@ -58,7 +58,11 @@ clean-doc:
 	rm -rf docs/build
 
 lint: ## check style with flake8
-	flake8 imagehash.py tests
+	flake8 .
+
+lint-fix: ## fix style with autopep8 and isort
+	autopep8 . --in-place --aggressive --aggressive --aggressive --recursive
+	isort .
 
 test: ## run tests quickly with the default Python
 	pytest

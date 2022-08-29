@@ -1,5 +1,5 @@
-six
 pillow
 numpy
 scipy
+scipy>=1.7 # [py>=39]
 pywavelets
