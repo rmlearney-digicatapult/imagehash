@@ -6,6 +6,9 @@ import imagehash
 
 from .utils import TestImageHash
 
+CHECK_HASH_DEFAULT = range(2, 5)
+CHECK_HASH_SIZE_DEFAULT = range(-1, 1)
+
 
 class Test(TestImageHash):
     def setUp(self):
@@ -40,7 +43,7 @@ class Test(TestImageHash):
     def test_colorhash_size(self):
         self.check_hash_size(self.func, self.image)
 
-    def check_hash_stored(self, func, image, binbits=range(2, 5)):
+    def check_hash_stored(self, func, image, binbits=CHECK_HASH_DEFAULT):
         for bit in binbits:
             image_hash = func(image, bit)
             other_hash = imagehash.hex_to_flathash(str(image_hash), bit * (2 + 6 * 2))
@@ -53,13 +56,13 @@ class Test(TestImageHash):
                                                    other_hash))
             self.assertEqual(distance, 0, emsg)
 
-    def check_hash_length(self, func, image, binbits=range(2, 5)):
+    def check_hash_length(self, func, image, binbits=CHECK_HASH_DEFAULT):
         for bit in binbits:
             image_hash = func(image, bit)
             emsg = 'bit={} is not respected'.format(bit)
             self.assertEqual(image_hash.hash.size, (2 + 6 * 2) * bit, emsg)
 
-    def check_hash_size(self, func, image, binbits=range(-1, 1)):
+    def check_hash_size(self, func, image, binbits=CHECK_HASH_SIZE_DEFAULT):
         for bit in binbits:
             with self.assertRaises(ValueError):
                 func(image, bit)

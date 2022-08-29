@@ -66,9 +66,23 @@ class Test(TestImageHash):
     def test_crop_resistant_hash(self):
         result_hash = imagehash.crop_resistant_hash(self.peppers)
         if _pillow_has_convert_fix():
-            known_hash = "c4d9f3e3e1c18101,706c6e66464c99b9,98d8f1ecd8f0f0e1,a082c0c49acc6dbd,f1f39b99c1c1b1b1,3a7ece1c9df4fcb9"
+            known_hash = (
+                "c4d9f3e3e1c18101,"
+                "706c6e66464c99b9,"
+                "98d8f1ecd8f0f0e1,"
+                "a082c0c49acc6dbd,"
+                "f1f39b99c1c1b1b1,"
+                "3a7ece1c9df4fcb9"
+            )
         else:
-            known_hash = "c4d9f1e3e1c18101,706c6e66464c99b9,98d8f1ecd8f0f0e1,a282c0c49acc6dbd,b1f39b99e1c1b1b1,3a7ece1c9df4fcb9"
+            known_hash = (
+                "c4d9f1e3e1c18101,"
+                "706c6e66464c99b9,"
+                "98d8f1ecd8f0f0e1,"
+                "a282c0c49acc6dbd,"
+                "b1f39b99e1c1b1b1,"
+                "3a7ece1c9df4fcb9"
+            )
         self.assertEqual(str(result_hash), known_hash)
 
     def test_crop_resistant_segmentation(self):

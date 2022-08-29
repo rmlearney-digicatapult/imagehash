@@ -8,6 +8,9 @@ from PIL import Image
 
 import imagehash
 
+CHECK_HASH_DEFAULT = range(2, 21)
+CHECK_HASH_SIZE_DEFAULT = range(-1, 2)
+
 
 class TestImageHash(unittest.TestCase):
     @staticmethod
@@ -41,13 +44,13 @@ class TestImageHash(unittest.TestCase):
                                        distance))
         self.assertTrue(distance > 10, emsg)
 
-    def check_hash_length(self, func, image, sizes=range(2, 21)):
+    def check_hash_length(self, func, image, sizes=CHECK_HASH_DEFAULT):
         for hash_size in sizes:
             image_hash = func(image, hash_size=hash_size)
             emsg = 'hash_size={} is not respected'.format(hash_size)
             self.assertEqual(image_hash.hash.size, hash_size**2, emsg)
 
-    def check_hash_stored(self, func, image, sizes=range(2, 21)):
+    def check_hash_stored(self, func, image, sizes=CHECK_HASH_DEFAULT):
         for hash_size in sizes:
             image_hash = func(image, hash_size)
             other_hash = imagehash.hex_to_hash(str(image_hash))
@@ -60,7 +63,7 @@ class TestImageHash(unittest.TestCase):
                                                    other_hash))
             self.assertEqual(distance, 0, emsg)
 
-    def check_hash_size(self, func, image, sizes=range(-1, 2)):
+    def check_hash_size(self, func, image, sizes=CHECK_HASH_SIZE_DEFAULT):
         for hash_size in sizes:
             with self.assertRaises(ValueError):
                 func(image, hash_size)

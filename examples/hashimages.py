@@ -53,4 +53,4 @@ files = sys.argv[1:]
 for path in files:
     hashes = [str(hashfuncopener(path)) for name, hashfuncopener in hashfuncopeners]
     print(path, ' '.join(hashes))
-    #print(path, colorhash(path))
+    # print(path, colorhash(path))

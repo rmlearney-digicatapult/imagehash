@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 from __future__ import absolute_import, division, print_function
 
-import six
 from PIL import Image
 
 import imagehash
@@ -39,7 +38,7 @@ def find_similar_images(userpaths, hashfunc=imagehash.average_hash):
     #        print(" ".join(img_list))
 
 
-if __name__ == '__main__':
+if __name__ == '__main__':  # noqa: C901
     import os
     import sys
 
@@ -71,7 +70,8 @@ Method:
     elif hashmethod == 'whash-haar':
         hashfunc = imagehash.whash
     elif hashmethod == 'whash-db4':
-        def hashfunc(img): return imagehash.whash(img, mode='db4')
+        def hashfunc(img):
+            return imagehash.whash(img, mode='db4')
     elif hashmethod == 'colorhash':
         hashfunc = imagehash.colorhash
     elif hashmethod == 'crop-resistant':
