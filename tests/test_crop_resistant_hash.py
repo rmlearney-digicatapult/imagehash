@@ -1,9 +1,10 @@
-from __future__ import (absolute_import, division, print_function)
+from __future__ import absolute_import, division, print_function
 
 import unittest
 from datetime import datetime
 
 import imagehash
+
 from .utils import TestImageHash
 
 

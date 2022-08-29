@@ -1,9 +1,11 @@
-from __future__ import (absolute_import, division, print_function)
+from __future__ import absolute_import, division, print_function
 
-from PIL import Image
 import unittest
 
+from PIL import Image
+
 import imagehash
+
 from .utils import TestImageHash
 
 
@@ -23,6 +25,7 @@ class Test(TestImageHash):
 
     def test_dhash_size(self):
         self.check_hash_size(self.func, self.image)
+
 
 if __name__ == '__main__':
     unittest.main()

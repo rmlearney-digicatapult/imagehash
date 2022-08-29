@@ -3,7 +3,7 @@
 
 try:
     from setuptools import setup
-except:
+except BaseException:
     from distutils.core import setup
 
 long_description = ""

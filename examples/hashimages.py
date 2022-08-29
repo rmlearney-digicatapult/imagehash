@@ -1,8 +1,10 @@
 #!/usr/bin/env python
-from __future__ import (absolute_import, division, print_function)
-from PIL import Image
+from __future__ import absolute_import, division, print_function
+
 import sys
+
 import numpy as np
+from PIL import Image
 
 import imagehash
 
@@ -15,12 +17,14 @@ hashfuncs = [
     ('colorhash', imagehash.colorhash),
 ]
 
+
 def alpharemover(image):
     if image.mode != 'RGBA':
         return image
-    canvas = Image.new('RGBA', image.size, (255,255,255,255))
+    canvas = Image.new('RGBA', image.size, (255, 255, 255, 255))
     canvas.paste(image, mask=image)
     return canvas.convert('RGB')
+
 
 def image_loader(hashfunc, hash_size=8):
     def function(path):
@@ -41,6 +45,7 @@ def with_ztransform_preprocess(hashfunc, hash_size=8):
         return hashfunc(image)
     return function
 
+
 hashfuncopeners = [(name, image_loader(func)) for name, func in hashfuncs]
 hashfuncopeners += [(name + '-z', with_ztransform_preprocess(func)) for name, func in hashfuncs if name != 'colorhash']
 
@@ -49,6 +54,3 @@ for path in files:
     hashes = [str(hashfuncopener(path)) for name, hashfuncopener in hashfuncopeners]
     print(path, ' '.join(hashes))
     #print(path, colorhash(path))
-
-
-

@@ -1,8 +1,9 @@
-from __future__ import (absolute_import, division, print_function)
+from __future__ import absolute_import, division, print_function
 
 import unittest
 
 import imagehash
+
 from .utils import TestImageHash
 
 
@@ -39,10 +40,10 @@ class Test(TestImageHash):
     def test_colorhash_size(self):
         self.check_hash_size(self.func, self.image)
 
-    def check_hash_stored(self, func, image, binbits=range(2,5)):
+    def check_hash_stored(self, func, image, binbits=range(2, 5)):
         for bit in binbits:
             image_hash = func(image, bit)
-            other_hash = imagehash.hex_to_flathash(str(image_hash), bit * (2 + 6*2))
+            other_hash = imagehash.hex_to_flathash(str(image_hash), bit * (2 + 6 * 2))
             emsg = 'stringified hash {} != original hash {}'.format(other_hash,
                                                                     image_hash)
             self.assertEqual(image_hash, other_hash, emsg)
@@ -52,13 +53,13 @@ class Test(TestImageHash):
                                                    other_hash))
             self.assertEqual(distance, 0, emsg)
 
-    def check_hash_length(self, func, image, binbits=range(2,5)):
+    def check_hash_length(self, func, image, binbits=range(2, 5)):
         for bit in binbits:
             image_hash = func(image, bit)
             emsg = 'bit={} is not respected'.format(bit)
-            self.assertEqual(image_hash.hash.size, (2 + 6 * 2)*bit, emsg)
+            self.assertEqual(image_hash.hash.size, (2 + 6 * 2) * bit, emsg)
 
-    def check_hash_size(self, func, image, binbits=range(-1,1)):
+    def check_hash_size(self, func, image, binbits=range(-1, 1)):
         for bit in binbits:
             with self.assertRaises(ValueError):
                 func(image, bit)

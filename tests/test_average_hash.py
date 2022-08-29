@@ -1,8 +1,9 @@
-from __future__ import (absolute_import, division, print_function)
+from __future__ import absolute_import, division, print_function
 
 import unittest
 
 import imagehash
+
 from .utils import TestImageHash
 
 
@@ -22,7 +23,6 @@ class Test(TestImageHash):
 
     def test_average_hash_size(self):
         self.check_hash_size(self.func, self.image)
-
 
 
 if __name__ == '__main__':

@@ -1,4 +1,4 @@
-from __future__ import (absolute_import, division, print_function)
+from __future__ import absolute_import, division, print_function
 
 import os
 import os.path
@@ -41,13 +41,13 @@ class TestImageHash(unittest.TestCase):
                                        distance))
         self.assertTrue(distance > 10, emsg)
 
-    def check_hash_length(self, func, image, sizes=range(2,21)):
+    def check_hash_length(self, func, image, sizes=range(2, 21)):
         for hash_size in sizes:
             image_hash = func(image, hash_size=hash_size)
             emsg = 'hash_size={} is not respected'.format(hash_size)
             self.assertEqual(image_hash.hash.size, hash_size**2, emsg)
 
-    def check_hash_stored(self, func, image, sizes=range(2,21)):
+    def check_hash_stored(self, func, image, sizes=range(2, 21)):
         for hash_size in sizes:
             image_hash = func(image, hash_size)
             other_hash = imagehash.hex_to_hash(str(image_hash))
@@ -60,8 +60,7 @@ class TestImageHash(unittest.TestCase):
                                                    other_hash))
             self.assertEqual(distance, 0, emsg)
 
-    def check_hash_size(self, func, image, sizes=range(-1,2)):
+    def check_hash_size(self, func, image, sizes=range(-1, 2)):
         for hash_size in sizes:
             with self.assertRaises(ValueError):
                 func(image, hash_size)
-

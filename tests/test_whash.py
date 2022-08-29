@@ -1,10 +1,12 @@
-from __future__ import (absolute_import, division, print_function)
+from __future__ import absolute_import, division, print_function
 
-from PIL import Image
-import six
 import unittest
 
+import six
+from PIL import Image
+
 import imagehash
+
 from .utils import TestImageHash
 
 
@@ -18,10 +20,10 @@ class TestBasic(TestImageHash):
         self.check_hash_algorithm(self.func, self.image)
 
     def test_whash_length(self):
-        self.check_hash_length(self.func, self.image, sizes=[2,4,8,16,32,64])
+        self.check_hash_length(self.func, self.image, sizes=[2, 4, 8, 16, 32, 64])
 
     def test_whash_stored(self):
-        self.check_hash_stored(self.func, self.image, sizes=[2,4,8,16,32,64])
+        self.check_hash_stored(self.func, self.image, sizes=[2, 4, 8, 16, 32, 64])
 
 
 class Test(unittest.TestCase):
@@ -72,7 +74,7 @@ class Test(unittest.TestCase):
         emsg = 'image_scale is not power of 2'
         for image_scale in [4, 8, 16]:
             with six.assertRaisesRegex(self, AssertionError, emsg):
-                imagehash.whash(self.image, image_scale=image_scale+1)
+                imagehash.whash(self.image, image_scale=image_scale + 1)
 
 
 if __name__ == '__main__':
