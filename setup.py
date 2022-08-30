@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import sys
 
 try:
     from setuptools import setup
@@ -10,9 +9,6 @@ except:
 long_description = ""
 with open('README.rst') as f:
     long_description = f.read()
-
-# Fixes a version conflict between numpy and scipy on python 3.9+
-scipy = "scipy" if sys.version_info < (3, 9) else "scipy>=1.7"
 
 setup(
     name='ImageHash',
@@ -31,7 +27,7 @@ setup(
     install_requires=[
         "six",
         "numpy",
-        scipy,       # for phash
+        'scipy',       # for phash
         "pillow",      # or PIL
         "PyWavelets",  # for whash
     ],
