@@ -32,11 +32,23 @@ Rotation by 26: 21 Hamming difference
 from __future__ import (absolute_import, division, print_function)
 
 from PIL import Image, ImageFilter
-from typing import Literal
+import sys
 import numpy
-import numpy.typing
 #import scipy.fftpack
 #import pywt
+
+if sys.version_info < (3, 8):
+		WhashMode = str
+else:
+		from typing import Literal
+		WhashMode = Literal['haar', 'db4']
+
+if sys.version_info < (3, 7):
+		NDArray = list
+else:
+		import numpy.typing
+		NDArray = numpy.typing.NDArray[numpy.int32]
+
 __version__ = "4.2.1"
 
 """
@@ -88,8 +100,8 @@ class ImageHash(object):
 	Hash encapsulation. Can be used for dictionary keys and comparisons.
 	"""
 	def __init__(self, binary_array):
-		# type: (numpy.typing.NDArray[numpy.int32]) -> None
-		self.hash = binary_array	# type: numpy.typing.NDArray[numpy.int32]
+		# type: (NDArray) -> None
+		self.hash = binary_array	# type: NDArray
 
 	def __str__(self):
 		return _binary_array_to_hex(self.hash.flatten())
@@ -124,6 +136,22 @@ class ImageHash(object):
 	def __len__(self):
 		# Returns the bit length of the hash
 		return self.hash.size
+
+
+if sys.version_info < (3, 3):
+		pass
+elif sys.version_info < (3, 5):
+		from collections.abc import Callable
+		MeanFunc = Callable
+		HashFunc = Callable
+elif sys.version_info < (3, 9):
+		from typing import Callable
+		MeanFunc = Callable[[NDArray], float]
+		HashFunc = Callable[[Image.Image], ImageHash]
+else:
+		from collections.abc import Callable
+		MeanFunc = Callable[[NDArray], float]
+		HashFunc = Callable[[Image.Image], ImageHash]
 
 
 def hex_to_hash(hexstr):
@@ -177,7 +205,7 @@ def old_hex_to_hash(hexstr, hash_size=8):
 
 
 def average_hash(image, hash_size=8, mean=numpy.mean):
-	# type: (Image.Image, int, ...) -> ImageHash
+	# type: (Image.Image, int, MeanFunc) -> ImageHash
 	"""
 	Average Hash computation
 
@@ -289,7 +317,7 @@ def dhash_vertical(image, hash_size=8):
 
 
 def whash(image, hash_size = 8, image_scale = None, mode = 'haar', remove_max_haar_ll = True):
-	# type: (Image.Image, int, int | None, Literal['haar', 'db4'], bool) -> ImageHash
+	# type: (Image.Image, int, int | None, WhashMode, bool) -> ImageHash
 	"""
 	Wavelet Hash computation.
 
@@ -582,7 +610,7 @@ def _find_all_segments(pixels, segment_threshold, min_segment_size):
 
 def crop_resistant_hash(
 		image,	# type: Image.Image
-		hash_func=None,	# type: ...
+		hash_func=None,	# type: HashFunc
 		limit_segments=None,	# type: int | None
 		segment_threshold=128,	# type: int
 		min_segment_size=500,	# type: int
