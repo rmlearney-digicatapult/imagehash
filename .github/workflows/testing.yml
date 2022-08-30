@@ -10,6 +10,7 @@ jobs:
     strategy:
       matrix:
         python-version: [2.7, 3.5, 3.6, 3.9]
+      fail-fast: false
     steps:
       - uses: actions/checkout@v2
       - uses: conda-incubator/setup-miniconda@v2
@@ -30,6 +31,7 @@ jobs:
         run: |
           # stop the build if there are Python syntax errors or undefined names
           flake8 . --show-source
-      - run: python setup.py install
+      - name: Test install from setup.py
+        run: pip install .
       - run: coverage run -m pytest .
       - run: COVERALLS_REPO_TOKEN=mEQ4sldJtlrG3RzjGVD32EYrjUIj4YCV3 coveralls

@@ -4,13 +4,13 @@
 
 [run]
 branch = True
-include = 
-        imagehash.py
-        find_similar_images.py
+include =
+	imagehash.py
+	find_similar_images.py
 
 
 [report]
 exclude_lines =
-    pragma: no cover
-    def __repr__
-    if __name__ == .__main__.:
+	pragma: no cover
+	def __repr__
+	if __name__ == .__main__.:

@@ -60,8 +60,8 @@ clean-doc:
 lint: ## check style with flake8
 	flake8 .
 
-lint-fix: ## fix style with autopep8 and isort
-	autopep8 . --in-place --aggressive --aggressive --aggressive --recursive
+lint-fix: ## fix style with autopep8 and isort; ignores to not autofix tabs to spaces, but still warn when mixed
+	autopep8 . --in-place --aggressive --aggressive --aggressive --recursive --ignore=W191,E101,E111
 	isort .
 
 test: ## run tests quickly with the default Python
