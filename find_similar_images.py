@@ -13,9 +13,9 @@ Demo of hashing
 def find_similar_images(userpaths, hashfunc=imagehash.average_hash):
 	def is_image(filename):
 		f = filename.lower()
-		return f.endswith(".png") or f.endswith(".jpg") or \
-			f.endswith(".jpeg") or f.endswith(".bmp") or \
-			f.endswith(".gif") or '.jpg' in f or f.endswith(".svg")
+		return f.endswith('.png') or f.endswith('.jpg') or \
+			f.endswith('.jpeg') or f.endswith('.bmp') or \
+			f.endswith('.gif') or '.jpg' in f or f.endswith('.svg')
 
 	image_filenames = []
 	for userpath in userpaths:
@@ -78,5 +78,5 @@ Method:
 		hashfunc = imagehash.crop_resistant_hash
 	else:
 		usage()
-	userpaths = sys.argv[2:] if len(sys.argv) > 2 else "."
+	userpaths = sys.argv[2:] if len(sys.argv) > 2 else '.'
 	find_similar_images(userpaths=userpaths, hashfunc=hashfunc)

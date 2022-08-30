@@ -11,7 +11,7 @@ from .utils import TestImageHash
 class Test(TestImageHash):
 	def setUp(self):
 		self.image = self.get_data_image()
-		self.peppers = self.get_data_image("peppers.png")
+		self.peppers = self.get_data_image('peppers.png')
 
 	def test_segmented_hash(self):
 		original_hash = imagehash.crop_resistant_hash(self.image)
@@ -28,7 +28,7 @@ class Test(TestImageHash):
 		self.assertEqual(
 			original_hash.best_match(other_hashes),
 			small_rotate_hash,
-			"Hash of the slightly rotated image should be a better match than for the more heavily rotated image."
+			'Hash of the slightly rotated image should be a better match than for the more heavily rotated image.'
 		)
 
 	def test_segmented_hash__hash_func(self):
@@ -36,7 +36,7 @@ class Test(TestImageHash):
 		segmented_dhash = imagehash.crop_resistant_hash(self.image, imagehash.dhash)
 		self.assertFalse(
 			segmented_ahash.matches(segmented_dhash),
-			"Segmented hash should not match when the underlying hashing method is not the same"
+			'Segmented hash should not match when the underlying hashing method is not the same'
 		)
 
 	def test_segmented_hash__limit_segments(self):
@@ -44,11 +44,11 @@ class Test(TestImageHash):
 		segmented_limit = imagehash.crop_resistant_hash(self.image, limit_segments=1)
 		self.assertGreaterEqual(
 			len(segmented_orig.segment_hashes), len(segmented_limit.segment_hashes),
-			"Limit segments should mean there are fewer segments"
+			'Limit segments should mean there are fewer segments'
 		)
 		self.assertEqual(
 			len(segmented_limit.segment_hashes), 1,
-			"Limit segments should correctly limit the segment count"
+			'Limit segments should correctly limit the segment count'
 		)
 
 	def test_segmented_hash__segment_threshold(self):
@@ -56,7 +56,7 @@ class Test(TestImageHash):
 		segmented_high_threshold = imagehash.crop_resistant_hash(self.image, segment_threshold=250)
 		self.assertFalse(
 			segmented_low_threshold.matches(segmented_high_threshold, region_cutoff=3),
-			"Segmented hash should not match when segment threshold is changed"
+			'Segmented hash should not match when segment threshold is changed'
 		)
 
 	def test_segmentation_image_size(self):
@@ -68,7 +68,7 @@ class Test(TestImageHash):
 		imagehash.crop_resistant_hash(self.image, segmentation_image_size=400)
 		large_timed = datetime.now() - start_time
 
-		self.assertGreater(large_timed, small_timed, "Hashing should take longer when the segmentation image is larger")
+		self.assertGreater(large_timed, small_timed, 'Hashing should take longer when the segmentation image is larger')
 
 	def test_min_segment_size(self):
 		small_segments_hash = imagehash.crop_resistant_hash(self.peppers, min_segment_size=100)
@@ -77,12 +77,12 @@ class Test(TestImageHash):
 		self.assertGreater(
 			len(small_segments_hash.segment_hashes),
 			len(big_segments_hash.segment_hashes),
-			"Small segment size limit should lead to larger number of segments detected."
+			'Small segment size limit should lead to larger number of segments detected.'
 		)
 		self.assertEqual(
 			small_segments_hash,
 			big_segments_hash,
-			"Hashes should still match, as large segments are present in both"
+			'Hashes should still match, as large segments are present in both'
 		)
 
 	def test_crop_resistance(self):
@@ -97,10 +97,10 @@ class Test(TestImageHash):
 		crop_hash_40 = imagehash.crop_resistant_hash(crop_40)
 		crop_hash_asymmetric = imagehash.crop_resistant_hash(crop_asymmetric)
 
-		self.assertEqual(crop_hash_10, full_hash, "Slightly cropped image hash should match full image hash")
-		self.assertEqual(crop_hash_40, full_hash, "Heavily cropped image hash should match full image hash")
+		self.assertEqual(crop_hash_10, full_hash, 'Slightly cropped image hash should match full image hash')
+		self.assertEqual(crop_hash_40, full_hash, 'Heavily cropped image hash should match full image hash')
 		self.assertEqual(
-			crop_hash_asymmetric, full_hash, "Asymmetrically cropped image hash should match full image hash"
+			crop_hash_asymmetric, full_hash, 'Asymmetrically cropped image hash should match full image hash'
 		)
 
 

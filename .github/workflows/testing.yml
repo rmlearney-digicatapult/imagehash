@@ -20,9 +20,14 @@ jobs:
       - name: Install imagemagick
         run: |
           sudo apt-get install -y imagemagick
+      # conda does not support environment markers
+      - name: Install testing dependencies (Python 3.6+)
+        if: ${{ matrix.python-version >= 3.6 }}
+        run: |
+          conda install -c anaconda -c conda-forge --file requirements-linting-old.txt
       - name: Install testing dependencies
         run: |
-          conda install -c anaconda -c conda-forge --file requirements-conda.txt --file requirements-linting.txt six packaging pytest coveralls coverage
+          conda install -c anaconda -c conda-forge --file requirements-conda.txt --file requirements-linting-old.txt six packaging pytest coveralls coverage
       - name: Conda info
         run: |
           conda info

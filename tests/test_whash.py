@@ -33,7 +33,7 @@ class Test(unittest.TestCase):
 	def _get_white_image(self, size=None):
 		if size is None:
 			size = (512, 512)
-		return Image.new("RGB", size, "white")
+		return Image.new('RGB', size, 'white')
 
 	def test_hash_size_2power(self):
 		for hash_size in [4, 8, 16]:
