@@ -58,7 +58,7 @@ clean-doc:
 	rm -rf docs/build
 
 lint: ## check style with flake8
-	flake8 imagehash.py tests
+	flake8 imagehash/__init__.py tests
 
 test: ## run tests quickly with the default Python
 	pytest

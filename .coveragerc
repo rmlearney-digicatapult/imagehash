@@ -5,7 +5,7 @@
 [run]
 branch = True
 include = 
-        imagehash.py
+        imagehash/__init__.py
         find_similar_images.py
 
 

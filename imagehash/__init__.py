@@ -32,9 +32,23 @@ Rotation by 26: 21 Hamming difference
 from __future__ import (absolute_import, division, print_function)
 
 from PIL import Image, ImageFilter
+import sys
 import numpy
 #import scipy.fftpack
 #import pywt
+
+if sys.version_info < (3, 8):
+		WhashMode = str
+else:
+		from typing import Literal
+		WhashMode = Literal['haar', 'db4']
+
+if sys.version_info < (3, 7):
+		NDArray = list
+else:
+		import numpy.typing
+		NDArray = numpy.typing.NDArray[numpy.int32]
+
 __version__ = "4.2.1"
 
 """
@@ -86,7 +100,8 @@ class ImageHash(object):
 	Hash encapsulation. Can be used for dictionary keys and comparisons.
 	"""
 	def __init__(self, binary_array):
-		self.hash = binary_array
+		# type: (NDArray) -> None
+		self.hash = binary_array	# type: NDArray
 
 	def __str__(self):
 		return _binary_array_to_hex(self.hash.flatten())
@@ -95,6 +110,7 @@ class ImageHash(object):
 		return repr(self.hash)
 
 	def __sub__(self, other):
+		# type: (ImageHash) -> int
 		if other is None:
 			raise TypeError('Other hash must not be None.')
 		if self.hash.size != other.hash.size:
@@ -102,11 +118,13 @@ class ImageHash(object):
 		return numpy.count_nonzero(self.hash.flatten() != other.hash.flatten())
 
 	def __eq__(self, other):
+		# type: (ImageHash) -> bool
 		if other is None:
 			return False
 		return numpy.array_equal(self.hash.flatten(), other.hash.flatten())
 
 	def __ne__(self, other):
+		# type: (ImageHash) -> bool
 		if other is None:
 			return False
 		return not numpy.array_equal(self.hash.flatten(), other.hash.flatten())
@@ -120,7 +138,24 @@ class ImageHash(object):
 		return self.hash.size
 
 
+if sys.version_info < (3, 3):
+		pass
+elif sys.version_info < (3, 5):
+		from collections.abc import Callable
+		MeanFunc = Callable
+		HashFunc = Callable
+elif sys.version_info < (3, 9):
+		from typing import Callable
+		MeanFunc = Callable[[NDArray], float]
+		HashFunc = Callable[[Image.Image], ImageHash]
+else:
+		from collections.abc import Callable
+		MeanFunc = Callable[[NDArray], float]
+		HashFunc = Callable[[Image.Image], ImageHash]
+
+
 def hex_to_hash(hexstr):
+	# type: (str) -> ImageHash
 	"""
 	Convert a stored hash (hex, as retrieved from str(Imagehash))
 	back to a Imagehash object.
@@ -140,6 +175,7 @@ def hex_to_hash(hexstr):
 
 
 def hex_to_flathash(hexstr, hashsize):
+	# type: (str, int) -> ImageHash
 	hash_size = int(len(hexstr)*4 / (hashsize))
 	binary_array = '{:0>{width}b}'.format(int(hexstr, 16), width=hash_size * hashsize)
 	hash_array = numpy.array([[bool(int(d)) for d in binary_array]])[-hash_size * hashsize:]
@@ -148,6 +184,7 @@ def hex_to_flathash(hexstr, hashsize):
 
 
 def old_hex_to_hash(hexstr, hash_size=8):
+	# type: (str, int) -> ImageHash
 	"""
 	Convert a stored hash (hex, as retrieved from str(Imagehash))
 	back to a Imagehash object. This method should be used for
@@ -168,6 +205,7 @@ def old_hex_to_hash(hexstr, hash_size=8):
 
 
 def average_hash(image, hash_size=8, mean=numpy.mean):
+	# type: (Image.Image, int, MeanFunc) -> ImageHash
 	"""
 	Average Hash computation
 
@@ -195,6 +233,7 @@ def average_hash(image, hash_size=8, mean=numpy.mean):
 
 
 def phash(image, hash_size=8, highfreq_factor=4):
+	# type: (Image.Image, int, int) -> ImageHash
 	"""
 	Perceptual Hash computation.
 
@@ -217,6 +256,7 @@ def phash(image, hash_size=8, highfreq_factor=4):
 
 
 def phash_simple(image, hash_size=8, highfreq_factor=4):
+	# type: (Image.Image, int, int) -> ImageHash
 	"""
 	Perceptual Hash computation.
 
@@ -236,6 +276,7 @@ def phash_simple(image, hash_size=8, highfreq_factor=4):
 
 
 def dhash(image, hash_size=8):
+	# type: (Image.Image, int) -> ImageHash
 	"""
 	Difference Hash computation.
 
@@ -257,6 +298,7 @@ def dhash(image, hash_size=8):
 
 
 def dhash_vertical(image, hash_size=8):
+	# type: (Image.Image, int) -> ImageHash
 	"""
 	Difference Hash computation.
 
@@ -275,6 +317,7 @@ def dhash_vertical(image, hash_size=8):
 
 
 def whash(image, hash_size = 8, image_scale = None, mode = 'haar', remove_max_haar_ll = True):
+	# type: (Image.Image, int, int | None, WhashMode, bool) -> ImageHash
 	"""
 	Wavelet Hash computation.
 
@@ -325,6 +368,7 @@ def whash(image, hash_size = 8, image_scale = None, mode = 'haar', remove_max_ha
 
 
 def colorhash(image, binbits=3):
+	# type: (Image.Image, int) -> ImageHash
 	"""
 	Color Hash computation.
 
@@ -383,17 +427,21 @@ class ImageMultiHash(object):
 	The matching logic is implemented as described in Efficient Cropping-Resistant Robust Image Hashing
 	"""
 	def __init__(self, hashes):
-		self.segment_hashes = hashes
+		# type: (list[ImageHash]) -> None
+		self.segment_hashes = hashes	# type: list[ImageHash]
 
 	def __eq__(self, other):
+		# type: (ImageMultiHash) -> bool
 		if other is None:
 			return False
 		return self.matches(other)
 
 	def __ne__(self, other):
+		# type: (ImageMultiHash) -> bool
 		return not self.matches(other)
 
 	def __sub__(self, other, hamming_cutoff=None, bit_error_rate=None):
+		# type: (ImageMultiHash, float | None, float | None) -> float
 		matches, sum_distance = self.hash_diff(other, hamming_cutoff, bit_error_rate)
 		max_difference = len(self.segment_hashes)
 		if matches == 0:
@@ -413,6 +461,7 @@ class ImageMultiHash(object):
 		return repr(self.segment_hashes)
 
 	def hash_diff(self, other_hash, hamming_cutoff=None, bit_error_rate=None):
+		# type: (ImageMultiHash, float | None, float | None) -> tuple[int, int]
 		"""
 		Gets the difference between two multi-hashes, as a tuple. The first element of the tuple is the number of
 		matching segments, and the second element is the sum of the hamming distances of matching hashes.
@@ -440,6 +489,7 @@ class ImageMultiHash(object):
 		return len(distances), sum(distances)
 
 	def matches(self, other_hash, region_cutoff=1, hamming_cutoff=None, bit_error_rate=None):
+		# type: (ImageMultiHash, int, float | None, float | None) -> bool
 		"""
 		Checks whether this hash matches another crop resistant hash, `other_hash`.
 		:param other_hash: The image multi hash to compare against
@@ -452,6 +502,7 @@ class ImageMultiHash(object):
 		return matches >= region_cutoff
 
 	def best_match(self, other_hashes, hamming_cutoff=None, bit_error_rate=None):
+		# type: (list[ImageMultiHash], float | None, float | None) -> float
 		"""
 		Returns the hash in a list which is the best match to the current hash
 		:param other_hashes: A list of image multi hashes to compare against
@@ -558,13 +609,14 @@ def _find_all_segments(pixels, segment_threshold, min_segment_size):
 
 
 def crop_resistant_hash(
-		image,
-		hash_func=None,
-		limit_segments=None,
-		segment_threshold=128,
-		min_segment_size=500,
-		segmentation_image_size=300
+		image,	# type: Image.Image
+		hash_func=None,	# type: HashFunc
+		limit_segments=None,	# type: int | None
+		segment_threshold=128,	# type: int
+		min_segment_size=500,	# type: int
+		segmentation_image_size=300	# type: int
 	):
+	# type: (...) -> ImageMultiHash
 	"""
 	Creates a CropResistantHash object, by the algorithm described in the paper "Efficient Cropping-Resistant Robust
 	Image Hashing". DOI 10.1109/ARES.2014.85
