@@ -27,7 +27,7 @@ setup(
     install_requires=[
         "six",
         "numpy",
-        'scipy',       # for phash
+        "scipy",       # for phash
         "pillow",      # or PIL
         "PyWavelets",  # for whash
     ],
