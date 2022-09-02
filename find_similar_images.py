@@ -48,13 +48,13 @@ if __name__ == '__main__':  # noqa: C901
 Identifies similar images in the directory.
 
 Method:
-	ahash:		Average hash
-	phash:		Perceptual hash
-	dhash:		Difference hash
-	whash-haar:	Haar wavelet hash
-	whash-db4:	Daubechies wavelet hash
-	colorhash:	HSV color hash
-	crop-resistant: Crop-resistant hash
+  ahash:          Average hash
+  phash:          Perceptual hash
+  dhash:          Difference hash
+  whash-haar:     Haar wavelet hash
+  whash-db4:      Daubechies wavelet hash
+  colorhash:      HSV color hash
+  crop-resistant: Crop-resistant hash
 
 (C) Johannes Buchner, 2013-2017
 """ % sys.argv[0])
