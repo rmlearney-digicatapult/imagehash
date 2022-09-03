@@ -39,6 +39,7 @@ from PIL import Image, ImageFilter
 # import scipy.fftpack
 # import pywt
 
+# definition of whash type depends on python version:
 if sys.version_info < (3, 8):
 	WhashMode = str
 else:
@@ -51,13 +52,29 @@ else:
 	import numpy.typing
 	NDArray = numpy.typing.NDArray[numpy.int32]
 
+if sys.version_info < (3, 3):
+	pass
+elif sys.version_info < (3, 5):
+	from collections.abc import Callable
+	MeanFunc = Callable
+	HashFunc = Callable
+elif sys.version_info < (3, 9):
+	from typing import Callable
+	MeanFunc = Callable[[NDArray], float]
+	HashFunc = Callable[[Image.Image], ImageHash]
+else:
+	from collections.abc import Callable
+	MeanFunc = Callable[[NDArray], float]
+	HashFunc = Callable[[Image.Image], ImageHash]
+# end of dynamic code for typing
+
 __version__ = '4.2.1'
 
 """
 You may copy this file, if you keep the copyright information below:
 
 
-Copyright (c) 2013-2020, Johannes Buchner
+Copyright (c) 2013-2022, Johannes Buchner
 https://github.com/JohannesBuchner/imagehash
 
 All rights reserved.
@@ -139,22 +156,6 @@ class ImageHash:
 	def __len__(self):
 		# Returns the bit length of the hash
 		return self.hash.size
-
-
-if sys.version_info < (3, 3):
-	pass
-elif sys.version_info < (3, 5):
-	from collections.abc import Callable
-	MeanFunc = Callable
-	HashFunc = Callable
-elif sys.version_info < (3, 9):
-	from typing import Callable
-	MeanFunc = Callable[[NDArray], float]
-	HashFunc = Callable[[Image.Image], ImageHash]
-else:
-	from collections.abc import Callable
-	MeanFunc = Callable[[NDArray], float]
-	HashFunc = Callable[[Image.Image], ImageHash]
 
 
 def hex_to_hash(hexstr):
