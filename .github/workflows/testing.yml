@@ -20,9 +20,14 @@ jobs:
       - name: Install imagemagick
         run: |
           sudo apt-get install -y imagemagick
+      # conda does not support environment markers
+      - name: Install testing dependencies (Python 3.6+)
+        if: ${{ matrix.python-version >= 3.6 }}
+        run: |
+          conda install -c anaconda -c conda-forge --file requirements-linting-old.txt
       - name: Install testing dependencies
         run: |
-          conda install -c anaconda --file conda-requirements.txt flake8 packaging pytest coveralls coverage
+          conda install -c anaconda -c conda-forge --file requirements-conda.txt --file requirements-linting-old.txt six packaging pytest coveralls coverage
       - name: Conda info
         run: |
           conda info
@@ -30,9 +35,7 @@ jobs:
       - name: Lint with flake8
         run: |
           # stop the build if there are Python syntax errors or undefined names
-          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-          # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+          flake8 . --show-source
       - name: Test install from setup.py
         run: pip install .
       - run: coverage run -m pytest .

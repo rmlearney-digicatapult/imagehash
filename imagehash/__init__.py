@@ -17,8 +17,8 @@ False
 >>> print(hash - otherhash)
 36
 >>> for r in range(1, 30, 5):
-...     rothash = imagehash.average_hash(Image.open('test.png').rotate(r))
-...     print('Rotation by %d: %d Hamming difference' % (r, hash - rothash))
+...	rothash = imagehash.average_hash(Image.open('test.png').rotate(r))
+...	print('Rotation by %d: %d Hamming difference' % (r, hash - rothash))
 ...
 Rotation by 1: 2 Hamming difference
 Rotation by 6: 11 Hamming difference
@@ -29,27 +29,29 @@ Rotation by 26: 21 Hamming difference
 >>>
 """
 
-from __future__ import (absolute_import, division, print_function)
+from __future__ import absolute_import, division, print_function
 
-from PIL import Image, ImageFilter
 import sys
+
 import numpy
-#import scipy.fftpack
-#import pywt
+from PIL import Image, ImageFilter
+
+# import scipy.fftpack
+# import pywt
 
 if sys.version_info < (3, 8):
-		WhashMode = str
+	WhashMode = str
 else:
-		from typing import Literal
-		WhashMode = Literal['haar', 'db4']
+	from typing import Literal
+	WhashMode = Literal['haar', 'db4']
 
 if sys.version_info < (3, 7):
-		NDArray = list
+	NDArray = list
 else:
-		import numpy.typing
-		NDArray = numpy.typing.NDArray[numpy.int32]
+	import numpy.typing
+	NDArray = numpy.typing.NDArray[numpy.int32]
 
-__version__ = "4.2.1"
+__version__ = '4.2.1'
 
 """
 You may copy this file, if you keep the copyright information below:
@@ -60,27 +62,27 @@ https://github.com/JohannesBuchner/imagehash
 
 All rights reserved.
 
-Redistribution and use in source and binary forms, with or without 
-modification, are permitted provided that the following conditions are 
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
 met:
 
-Redistributions of source code must retain the above copyright 
-notice, this list of conditions and the following disclaimer. 
+Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.
 
-Redistributions in binary form must reproduce the above copyright 
-notice, this list of conditions and the following disclaimer in the 
-documentation and/or other materials provided with the distribution.  
+Redistributions in binary form must reproduce the above copyright
+notice, this list of conditions and the following disclaimer in the
+documentation and/or other materials provided with the distribution.
 
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS 
-IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED 
-TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A 
-PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT 
-HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
-SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT 
-LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, 
-DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY 
-THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT 
-(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
+IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
+TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 """
@@ -91,17 +93,18 @@ def _binary_array_to_hex(arr):
 	internal function to make a hex string out of a binary array.
 	"""
 	bit_string = ''.join(str(b) for b in 1 * arr.flatten())
-	width = int(numpy.ceil(len(bit_string)/4))
+	width = int(numpy.ceil(len(bit_string) / 4))
 	return '{:0>{width}x}'.format(int(bit_string, 2), width=width)
 
 
-class ImageHash(object):
+class ImageHash:
 	"""
 	Hash encapsulation. Can be used for dictionary keys and comparisons.
 	"""
+
 	def __init__(self, binary_array):
 		# type: (NDArray) -> None
-		self.hash = binary_array	# type: NDArray
+		self.hash = binary_array  # type: NDArray
 
 	def __str__(self):
 		return _binary_array_to_hex(self.hash.flatten())
@@ -139,19 +142,19 @@ class ImageHash(object):
 
 
 if sys.version_info < (3, 3):
-		pass
+	pass
 elif sys.version_info < (3, 5):
-		from collections.abc import Callable
-		MeanFunc = Callable
-		HashFunc = Callable
+	from collections.abc import Callable
+	MeanFunc = Callable
+	HashFunc = Callable
 elif sys.version_info < (3, 9):
-		from typing import Callable
-		MeanFunc = Callable[[NDArray], float]
-		HashFunc = Callable[[Image.Image], ImageHash]
+	from typing import Callable
+	MeanFunc = Callable[[NDArray], float]
+	HashFunc = Callable[[Image.Image], ImageHash]
 else:
-		from collections.abc import Callable
-		MeanFunc = Callable[[NDArray], float]
-		HashFunc = Callable[[Image.Image], ImageHash]
+	from collections.abc import Callable
+	MeanFunc = Callable[[NDArray], float]
+	HashFunc = Callable[[Image.Image], ImageHash]
 
 
 def hex_to_hash(hexstr):
@@ -162,25 +165,24 @@ def hex_to_hash(hexstr):
 
 	Notes:
 	1. This algorithm assumes all hashes are either
-	   bidimensional arrays with dimensions hash_size * hash_size,
-	   or onedimensional arrays with dimensions binbits * 14.
+			bidimensional arrays with dimensions hash_size * hash_size,
+			or onedimensional arrays with dimensions binbits * 14.
 	2. This algorithm does not work for hash_size < 2.
 	"""
-	hash_size = int(numpy.sqrt(len(hexstr)*4))
-	#assert hash_size == numpy.sqrt(len(hexstr)*4)
-	binary_array = '{:0>{width}b}'.format(int(hexstr, 16), width = hash_size * hash_size)
-	bit_rows = [binary_array[i:i+hash_size] for i in range(0, len(binary_array), hash_size)]
+	hash_size = int(numpy.sqrt(len(hexstr) * 4))
+	# assert hash_size == numpy.sqrt(len(hexstr)*4)
+	binary_array = '{:0>{width}b}'.format(int(hexstr, 16), width=hash_size * hash_size)
+	bit_rows = [binary_array[i:i + hash_size] for i in range(0, len(binary_array), hash_size)]
 	hash_array = numpy.array([[bool(int(d)) for d in row] for row in bit_rows])
 	return ImageHash(hash_array)
 
 
 def hex_to_flathash(hexstr, hashsize):
 	# type: (str, int) -> ImageHash
-	hash_size = int(len(hexstr)*4 / (hashsize))
+	hash_size = int(len(hexstr) * 4 / (hashsize))
 	binary_array = '{:0>{width}b}'.format(int(hexstr, 16), width=hash_size * hashsize)
 	hash_array = numpy.array([[bool(int(d)) for d in binary_array]])[-hash_size * hashsize:]
 	return ImageHash(hash_array)
-
 
 
 def old_hex_to_hash(hexstr, hash_size=8):
@@ -192,16 +194,16 @@ def old_hex_to_hash(hexstr, hash_size=8):
 	generated by newer versions of ImageHash, hex_to_hash should
 	be used instead.
 	"""
-	l = []
+	arr = []
 	count = hash_size * (hash_size // 4)
 	if len(hexstr) != count:
 		emsg = 'Expected hex string size of {}.'
 		raise ValueError(emsg.format(count))
 	for i in range(count // 2):
-		h = hexstr[i*2:i*2+2]
-		v = int("0x" + h, 16)
-		l.append([v & 2**i > 0 for i in range(8)])
-	return ImageHash(numpy.array(l))
+		h = hexstr[i * 2:i * 2 + 2]
+		v = int('0x' + h, 16)
+		arr.append([v & 2**i > 0 for i in range(8)])
+	return ImageHash(numpy.array(arr))
 
 
 def average_hash(image, hash_size=8, mean=numpy.mean):
@@ -211,16 +213,16 @@ def average_hash(image, hash_size=8, mean=numpy.mean):
 
 	Implementation follows http://www.hackerfactor.com/blog/index.php?/archives/432-Looks-Like-It.html
 
-	Step by step explanation: https://web.archive.org/web/20171112054354/https://www.safaribooksonline.com/blog/2013/11/26/image-hashing-with-python/
+	Step by step explanation: https://web.archive.org/web/20171112054354/https://www.safaribooksonline.com/blog/2013/11/26/image-hashing-with-python/ # noqa: E501
 
 	@image must be a PIL instance.
 	@mean how to determine the average luminescence. can try numpy.median instead.
 	"""
 	if hash_size < 2:
-		raise ValueError("Hash size must be greater than or equal to 2")
+		raise ValueError('Hash size must be greater than or equal to 2')
 
 	# reduce size and complexity, then covert to grayscale
-	image = image.convert("L").resize((hash_size, hash_size), Image.ANTIALIAS)
+	image = image.convert('L').resize((hash_size, hash_size), Image.ANTIALIAS)
 
 	# find average pixel value; 'pixels' is an array of the pixel values, ranging from 0 (black) to 255 (white)
 	pixels = numpy.asarray(image)
@@ -242,11 +244,11 @@ def phash(image, hash_size=8, highfreq_factor=4):
 	@image must be a PIL instance.
 	"""
 	if hash_size < 2:
-		raise ValueError("Hash size must be greater than or equal to 2")
+		raise ValueError('Hash size must be greater than or equal to 2')
 
 	import scipy.fftpack
 	img_size = hash_size * highfreq_factor
-	image = image.convert("L").resize((img_size, img_size), Image.ANTIALIAS)
+	image = image.convert('L').resize((img_size, img_size), Image.ANTIALIAS)
 	pixels = numpy.asarray(image)
 	dct = scipy.fftpack.dct(scipy.fftpack.dct(pixels, axis=0), axis=1)
 	dctlowfreq = dct[:hash_size, :hash_size]
@@ -266,10 +268,10 @@ def phash_simple(image, hash_size=8, highfreq_factor=4):
 	"""
 	import scipy.fftpack
 	img_size = hash_size * highfreq_factor
-	image = image.convert("L").resize((img_size, img_size), Image.ANTIALIAS)
+	image = image.convert('L').resize((img_size, img_size), Image.ANTIALIAS)
 	pixels = numpy.asarray(image)
 	dct = scipy.fftpack.dct(pixels)
-	dctlowfreq = dct[:hash_size, 1:hash_size+1]
+	dctlowfreq = dct[:hash_size, 1:hash_size + 1]
 	avg = dctlowfreq.mean()
 	diff = dctlowfreq > avg
 	return ImageHash(diff)
@@ -288,9 +290,9 @@ def dhash(image, hash_size=8):
 	"""
 	# resize(w, h), but numpy.array((h, w))
 	if hash_size < 2:
-		raise ValueError("Hash size must be greater than or equal to 2")
+		raise ValueError('Hash size must be greater than or equal to 2')
 
-	image = image.convert("L").resize((hash_size + 1, hash_size), Image.ANTIALIAS)
+	image = image.convert('L').resize((hash_size + 1, hash_size), Image.ANTIALIAS)
 	pixels = numpy.asarray(image)
 	# compute differences between columns
 	diff = pixels[:, 1:] > pixels[:, :-1]
@@ -309,14 +311,14 @@ def dhash_vertical(image, hash_size=8):
 	@image must be a PIL instance.
 	"""
 	# resize(w, h), but numpy.array((h, w))
-	image = image.convert("L").resize((hash_size, hash_size + 1), Image.ANTIALIAS)
+	image = image.convert('L').resize((hash_size, hash_size + 1), Image.ANTIALIAS)
 	pixels = numpy.asarray(image)
 	# compute differences between rows
 	diff = pixels[1:, :] > pixels[:-1, :]
 	return ImageHash(diff)
 
 
-def whash(image, hash_size = 8, image_scale = None, mode = 'haar', remove_max_haar_ll = True):
+def whash(image, hash_size=8, image_scale=None, mode='haar', remove_max_haar_ll=True):
 	# type: (Image.Image, int, int | None, WhashMode, bool) -> ImageHash
 	"""
 	Wavelet Hash computation.
@@ -326,15 +328,15 @@ def whash(image, hash_size = 8, image_scale = None, mode = 'haar', remove_max_ha
 	@image must be a PIL instance.
 	@hash_size must be a power of 2 and less than @image_scale.
 	@image_scale must be power of 2 and less than image size. By default is equal to max
-		power of 2 for an input image.
+					power of 2 for an input image.
 	@mode (see modes in pywt library):
-		'haar' - Haar wavelets, by default
-		'db4' - Daubechies wavelets
+					'haar' - Haar wavelets, by default
+					'db4' - Daubechies wavelets
 	@remove_max_haar_ll - remove the lowest low level (LL) frequency using Haar wavelet.
 	"""
 	import pywt
 	if image_scale is not None:
-		assert image_scale & (image_scale - 1) == 0, "image_scale is not power of 2"
+		assert image_scale & (image_scale - 1) == 0, 'image_scale is not power of 2'
 	else:
 		image_natural_scale = 2**int(numpy.log2(min(image.size)))
 		image_scale = max(image_natural_scale, hash_size)
@@ -342,29 +344,28 @@ def whash(image, hash_size = 8, image_scale = None, mode = 'haar', remove_max_ha
 	ll_max_level = int(numpy.log2(image_scale))
 
 	level = int(numpy.log2(hash_size))
-	assert hash_size & (hash_size-1) == 0, "hash_size is not power of 2"
-	assert level <= ll_max_level, "hash_size in a wrong range"
+	assert hash_size & (hash_size - 1) == 0, 'hash_size is not power of 2'
+	assert level <= ll_max_level, 'hash_size in a wrong range'
 	dwt_level = ll_max_level - level
 
-	image = image.convert("L").resize((image_scale, image_scale), Image.ANTIALIAS)
+	image = image.convert('L').resize((image_scale, image_scale), Image.ANTIALIAS)
 	pixels = numpy.asarray(image) / 255.
 
 	# Remove low level frequency LL(max_ll) if @remove_max_haar_ll using haar filter
 	if remove_max_haar_ll:
-		coeffs = pywt.wavedec2(pixels, 'haar', level = ll_max_level)
+		coeffs = pywt.wavedec2(pixels, 'haar', level=ll_max_level)
 		coeffs = list(coeffs)
 		coeffs[0] *= 0
 		pixels = pywt.waverec2(coeffs, 'haar')
 
 	# Use LL(K) as freq, where K is log2(@hash_size)
-	coeffs = pywt.wavedec2(pixels, mode, level = dwt_level)
+	coeffs = pywt.wavedec2(pixels, mode, level=dwt_level)
 	dwt_low = coeffs[0]
 
 	# Substract median and compute hash
 	med = numpy.median(dwt_low)
 	diff = dwt_low > med
 	return ImageHash(diff)
-
 
 
 def colorhash(image, binbits=3):
@@ -383,8 +384,8 @@ def colorhash(image, binbits=3):
 	"""
 
 	# bin in hsv space:
-	intensity = numpy.asarray(image.convert("L")).flatten()
-	h, s, v = [numpy.asarray(v).flatten() for v in image.convert("HSV").split()]
+	intensity = numpy.asarray(image.convert('L')).flatten()
+	h, s, v = [numpy.asarray(v).flatten() for v in image.convert('HSV').split()]
 	# black bin
 	mask_black = intensity < 256 // 8
 	frac_black = mask_black.mean()
@@ -398,7 +399,7 @@ def colorhash(image, binbits=3):
 
 	c = max(1, mask_colors.sum())
 	# in the color bins, make sub-bins by hue
-	hue_bins = numpy.linspace(0, 255, 6+1)
+	hue_bins = numpy.linspace(0, 255, 6 + 1)
 	if mask_faint_colors.any():
 		h_faint_counts, _ = numpy.histogram(h[mask_faint_colors], bins=hue_bins)
 	else:
@@ -411,24 +412,25 @@ def colorhash(image, binbits=3):
 	# now we have fractions in each category (6*2 + 2 = 14 bins)
 	# convert to hash and discretize:
 	maxvalue = 2**binbits
-	values = [min(maxvalue-1, int(frac_black * maxvalue)), min(maxvalue-1, int(frac_gray * maxvalue))]
+	values = [min(maxvalue - 1, int(frac_black * maxvalue)), min(maxvalue - 1, int(frac_gray * maxvalue))]
 	for counts in list(h_faint_counts) + list(h_bright_counts):
-		values.append(min(maxvalue-1, int(counts * maxvalue * 1. / c)))
+		values.append(min(maxvalue - 1, int(counts * maxvalue * 1. / c)))
 	# print(values)
 	bitarray = []
 	for v in values:
-		bitarray += [v // (2**(binbits-i-1)) % 2**(binbits-i) > 0 for i in range(binbits)]
+		bitarray += [v // (2**(binbits - i - 1)) % 2**(binbits - i) > 0 for i in range(binbits)]
 	return ImageHash(numpy.asarray(bitarray).reshape((-1, binbits)))
 
 
-class ImageMultiHash(object):
+class ImageMultiHash:
 	"""
 	This is an image hash containing a list of individual hashes for segments of the image.
 	The matching logic is implemented as described in Efficient Cropping-Resistant Robust Image Hashing
 	"""
+
 	def __init__(self, hashes):
 		# type: (list[ImageHash]) -> None
-		self.segment_hashes = hashes	# type: list[ImageHash]
+		self.segment_hashes = hashes  # type: list[ImageHash]
 
 	def __eq__(self, other):
 		# type: (ImageMultiHash) -> bool
@@ -455,7 +457,7 @@ class ImageMultiHash(object):
 		return hash(tuple(hash(segment) for segment in self.segment_hashes))
 
 	def __str__(self):
-		return ",".join(str(x) for x in self.segment_hashes)
+		return ','.join(str(x) for x in self.segment_hashes)
 
 	def __repr__(self):
 		return repr(self.segment_hashes)
@@ -536,10 +538,10 @@ def _find_region(remaining_pixels, segmented_pixels):
 		for pixel in new_pixels:
 			x, y = pixel
 			neighbours = [
-				(x-1, y),
-				(x+1, y),
-				(x, y-1),
-				(x, y+1)
+				(x - 1, y),
+				(x + 1, y),
+				(x, y - 1),
+				(x, y + 1)
 			]
 			try_next.update(neighbours)
 		# Remove pixels we have already seen
@@ -609,13 +611,13 @@ def _find_all_segments(pixels, segment_threshold, min_segment_size):
 
 
 def crop_resistant_hash(
-		image,	# type: Image.Image
-		hash_func=None,	# type: HashFunc
-		limit_segments=None,	# type: int | None
-		segment_threshold=128,	# type: int
-		min_segment_size=500,	# type: int
-		segmentation_image_size=300	# type: int
-	):
+	image,  # type: Image.Image
+	hash_func=None,  # type: HashFunc
+	limit_segments=None,  # type: int | None
+	segment_threshold=128,  # type: int
+	min_segment_size=500,  # type: int
+	segmentation_image_size=300  # type: int
+):
 	# type: (...) -> ImageMultiHash
 	"""
 	Creates a CropResistantHash object, by the algorithm described in the paper "Efficient Cropping-Resistant Robust
@@ -639,7 +641,7 @@ def crop_resistant_hash(
 
 	orig_image = image.copy()
 	# Convert to gray scale and resize
-	image = image.convert("L").resize((segmentation_image_size, segmentation_image_size), Image.ANTIALIAS)
+	image = image.convert('L').resize((segmentation_image_size, segmentation_image_size), Image.ANTIALIAS)
 	# Add filters
 	image = image.filter(ImageFilter.GaussianBlur()).filter(ImageFilter.MedianFilter())
 	pixels = numpy.array(image).astype(numpy.float32)
@@ -648,7 +650,7 @@ def crop_resistant_hash(
 
 	# If there are no segments, have 1 segment including the whole image
 	if not segments:
-		full_image_segment = {(0, 0), (segmentation_image_size-1, segmentation_image_size-1)}
+		full_image_segment = {(0, 0), (segmentation_image_size - 1, segmentation_image_size - 1)}
 		segments.append(full_image_segment)
 
 	# If segment limit is set, discard the smaller segments
@@ -663,8 +665,8 @@ def crop_resistant_hash(
 		scale_h = float(orig_h) / segmentation_image_size
 		min_y = min(coord[0] for coord in segment) * scale_h
 		min_x = min(coord[1] for coord in segment) * scale_w
-		max_y = (max(coord[0] for coord in segment)+1) * scale_h
-		max_x = (max(coord[1] for coord in segment)+1) * scale_w
+		max_y = (max(coord[0] for coord in segment) + 1) * scale_h
+		max_x = (max(coord[1] for coord in segment) + 1) * scale_w
 		# Compute robust hash for each bounding box
 		bounding_box = orig_image.crop((min_x, min_y, max_x, max_y))
 		hashes.append(hash_func(bounding_box))

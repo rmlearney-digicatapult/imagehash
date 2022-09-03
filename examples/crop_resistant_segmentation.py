@@ -1,9 +1,9 @@
 import numpy
-
-import imagehash
 from PIL import Image, ImageFilter
 
-IMAGE_FILE = "../tests/data/peppers.png"
+import imagehash
+
+IMAGE_FILE = '../tests/data/peppers.png'
 IMG_SIZE = 300
 SEGMENT_THRESHOLD = 128
 MIN_SEGMENT_SIZE = 500
@@ -24,14 +24,14 @@ RAINBOW = [
 full_image = Image.open(IMAGE_FILE)
 width, height = full_image.size
 # Image pre-processing
-image = full_image.convert("L").resize((IMG_SIZE, IMG_SIZE), Image.ANTIALIAS)
+image = full_image.convert('L').resize((IMG_SIZE, IMG_SIZE), Image.ANTIALIAS)
 # Add filters
 image = image.filter(ImageFilter.GaussianBlur()).filter(ImageFilter.MedianFilter())
 pixels = numpy.array(image).astype(numpy.float32)
 # Split segments
 segments = imagehash._find_all_segments(pixels, SEGMENT_THRESHOLD, MIN_SEGMENT_SIZE)
 # Change back to RGB
-image = image.convert("RGB")
+image = image.convert('RGB')
 # Colour in segments
 for num, segment in enumerate(segments):
 	for x, y in segment:

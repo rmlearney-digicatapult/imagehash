@@ -1,7 +1,8 @@
 import unittest
-import numpy as np
-import imagehash
 
+import numpy as np
+
+import imagehash
 
 # Each row is a test case where the first value is a bit sequence and
 # the second value is the expected hexadecimal representation for it.
@@ -57,15 +58,17 @@ hexadecimal_to_binary_values = [
 # Each row is a test case where the first value is a hexadecimal
 # sequence and the second value is the expected bool array for it.
 hexadecimal_to_bool_array = [
-	['9e3cc1f0f0c3e7c0', np.array([ [True,  False, False, True,  True,  True,  True,  False],
-									[False, False, True,  True,  True,  True,  False, False],
-									[True,  True,  False, False, False, False, False, True],
-									[True,  True,  True,  True,  False, False, False, False],
-									[True,  True,  True,  True,  False, False, False, False],
-									[True,  True,  False, False, False, False, True,  True],
-									[True,  True,  True,  False, False, True,  True,  True],
-									[True,  True,  False, False, False, False, False, False]]) ],
+	['9e3cc1f0f0c3e7c0', np.array([
+		[True, False, False, True, True, True, True, False],
+		[False, False, True, True, True, True, False, False],
+		[True, True, False, False, False, False, False, True],
+		[True, True, True, True, False, False, False, False],
+		[True, True, True, True, False, False, False, False],
+		[True, True, False, False, False, False, True, True],
+		[True, True, True, False, False, True, True, True],
+		[True, True, False, False, False, False, False, False]])],
 ]
+
 
 class TestHexConversions(unittest.TestCase):
 
