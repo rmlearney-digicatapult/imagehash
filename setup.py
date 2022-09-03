@@ -15,7 +15,7 @@ setup(
 	version='4.2.1',
 	author='Johannes Buchner',
 	author_email='buchner.johannes@gmx.at',
-	py_modules=['imagehash'],
+	packages=['imagehash'],
 	package_data={'imagehash': ['py.typed']},
 	data_files=[('images', ['tests/data/imagehash.png'])],
 	scripts=['find_similar_images.py'],
