@@ -25,17 +25,19 @@ jobs:
         if: ${{ matrix.python-version >= 3.6 }}
         run: |
           conda install -c anaconda -c conda-forge --file requirements-linting-old.txt
+      - name: Install mamba for faster py2 resolution
+        run: |
+          conda install -c anaconda -c conda-forge mamba
       - name: Install testing dependencies
         run: |
-          conda install -c anaconda -c conda-forge --file requirements-conda.txt --file requirements-linting-old.txt six packaging pytest coveralls coverage
+          mamba install -c anaconda -c conda-forge --file requirements-conda.txt --file requirements-linting-old.txt six packaging pytest coveralls coverage
       - name: Conda info
         run: |
           conda info
           conda list
       - name: Lint with flake8
-        run: |
-          # stop the build if there are Python syntax errors or undefined names
-          flake8 . --show-source
+        # stop the build if there are Python syntax errors or undefined names
+        run: flake8 . --show-source
       - name: Test install from setup.py
         run: pip install .
       - run: coverage run -m pytest .
