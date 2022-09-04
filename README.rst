@@ -121,11 +121,9 @@ Storage of hashes
 As illustrated above, hashes can be turned into strings.
 The strings can be turned back into a ImageHash object as follows.
 
-For single hashes::
+For single perceptual hashes::
 
-	>>> from PIL import Image
-	>>> import imagehash
-	>>> original_hash = imagehash.average_hash(Image.open('tests/data/imagehash.png'))
+	>>> original_hash = imagehash.phash(Image.open('tests/data/imagehash.png'))
 	>>> hash_as_str = str(original_hash)
 	>>> print(hash_as_str)
 	ffd7918181c9ffff
@@ -134,6 +132,12 @@ For single hashes::
 	ffd7918181c9ffff
 	>>> assert restored_hash == original_hash
 	>>> assert str(restored_hash) == hash_as_str
+
+For colorhash::
+
+	>>> original_hash = imagehash.colorhash(Image.open('tests/data/imagehash.png'), binbits=3)
+	>>> hash_as_str = str(original_hash)
+	>>> restored_hash = imagehash.hex_to_flathash(hash_as_str, hashsize=3)
 
 For storing the hashes in a database and use fast hamming distance
 searches, see pointers at https://github.com/JohannesBuchner/imagehash/issues/127
