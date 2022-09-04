@@ -157,9 +157,9 @@ def hex_to_multihash(hexstr):
 	   or onedimensional arrays with dimensions binbits * 14.
 	2. This algorithm does not work for hash_size < 2.
 	"""
-    	split = hexstr.split(',')
-    	hashes = [imagehash.hex_to_hash(x) for x in split]
-    	return imagehash.ImageMultiHash(hashes)
+	split = hexstr.split(',')
+	hashes = [hex_to_hash(x) for x in split]
+	return ImageMultiHash(hashes)
 
 
 def old_hex_to_hash(hexstr, hash_size=8):
