@@ -111,13 +111,11 @@ class ImageHash:
 		return numpy.count_nonzero(self.hash.flatten() != other.hash.flatten())
 
 	def __eq__(self, other):
-		# type: (ImageHash) -> bool
 		if other is None:
 			return False
 		return numpy.array_equal(self.hash.flatten(), other.hash.flatten())
 
 	def __ne__(self, other):
-		# type: (ImageHash) -> bool
 		if other is None:
 			return False
 		return not numpy.array_equal(self.hash.flatten(), other.hash.flatten())
@@ -135,16 +133,16 @@ class ImageHash:
 try:
 	# specify allowed values if possible (py3.8+)
 	from typing import Literal
-	WhashMode = Literal['haar', 'db4']
+	WhashMode = Literal['haar', 'db4']  # type: ignore
 except (ImportError, ImportError):
-	WhashMode = str
+	WhashMode = str  # type: ignore
 
 try:
 	# enable numpy array typing (py3.7+)
 	import numpy.typing
-	NDArray = numpy.typing.NDArray[numpy.int32]
+	NDArray = numpy.typing.NDArray[numpy.bool_]
 except (AttributeError, ImportError):
-	NDArray = list
+	NDArray = list  # type: ignore
 
 # type of Callable
 if sys.version_info >= (3, 3):
@@ -157,8 +155,8 @@ if sys.version_info >= (3, 3):
 		MeanFunc = Callable[[NDArray], float]
 		HashFunc = Callable[[Image.Image], ImageHash]
 	except TypeError:
-		MeanFunc = Callable
-		HashFunc = Callable
+		MeanFunc = Callable  # type: ignore
+		HashFunc = Callable  # type: ignore
 # end of dynamic code for typing
 
 
@@ -438,14 +436,14 @@ class ImageMultiHash:
 		self.segment_hashes = hashes  # type: list[ImageHash]
 
 	def __eq__(self, other):
-		# type: (ImageMultiHash) -> bool
+		# type: (object) -> bool
 		if other is None:
 			return False
-		return self.matches(other)
+		return self.matches(other)  # type: ignore
 
 	def __ne__(self, other):
-		# type: (ImageMultiHash) -> bool
-		return not self.matches(other)
+		# type: (object) -> bool
+		return not self.matches(other)  # type: ignore
 
 	def __sub__(self, other, hamming_cutoff=None, bit_error_rate=None):
 		# type: (ImageMultiHash, float | None, float | None) -> float
@@ -479,9 +477,9 @@ class ImageMultiHash:
 		default of 0.25 means that the segment hashes can be up to 25% different
 		"""
 		# Set default hamming cutoff if it's not set.
-		if hamming_cutoff is None and bit_error_rate is None:
-			bit_error_rate = 0.25
 		if hamming_cutoff is None:
+			if bit_error_rate is None:
+				bit_error_rate = 0.25
 			hamming_cutoff = len(self.segment_hashes[0]) * bit_error_rate
 		# Get the hash distance for each region hash within cutoff
 		distances = []
@@ -509,7 +507,7 @@ class ImageMultiHash:
 		return matches >= region_cutoff
 
 	def best_match(self, other_hashes, hamming_cutoff=None, bit_error_rate=None):
-		# type: (list[ImageMultiHash], float | None, float | None) -> float
+		# type: (list[ImageMultiHash], float | None, float | None) -> ImageMultiHash
 		"""
 		Returns the hash in a list which is the best match to the current hash
 		:param other_hashes: A list of image multi hashes to compare against
