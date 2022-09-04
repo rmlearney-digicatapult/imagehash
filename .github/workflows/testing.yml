@@ -32,14 +32,15 @@ jobs:
           sudo apt-get install -y imagemagick
       # conda does not support environment markers
       - name: Install testing dependencies (Python 3.6+)
-        if: ${{ !((matrix.python-version == '2.7') || (matrix.python-version == '3.5')) }}
+        if: ${{ !((matrix.python-version == '2.7') || (matrix.python-version == '3.5')) && steps.cache-primes.outputs.cache-hit != 'true' }}
         run: |
           conda install -c anaconda -c conda-forge --file requirements-linting-old.txt coverage-lcov
       - name: Preinstall dependencies (Python 2.7) from anaconda
-        if: ${{ matrix.python-version == '2.7' }}
+        if: ${{ matrix.python-version == '2.7' && steps.cache-primes.outputs.cache-hit != 'true' }}
         run: |
           conda install -c anaconda --file requirements-linting-anaconda.txt
       - name: Install testing dependencies
+        if: ${{ steps.cache-primes.outputs.cache-hit != 'true' }}
         run: |
           conda install -c conda-forge -c anaconda --file requirements-conda.txt --file requirements-linting-old.txt six packaging pytest coveralls coverage libstdcxx-ng
       - name: Conda info
