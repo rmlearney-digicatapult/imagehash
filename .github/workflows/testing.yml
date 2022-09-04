@@ -25,12 +25,9 @@ jobs:
         if: ${{ matrix.python-version >= 3.6 }}
         run: |
           conda install -c anaconda -c conda-forge --file requirements-linting-old.txt
-      - name: Install mamba for faster py2 resolution
-        run: |
-          conda install -c anaconda -c conda-forge mamba
       - name: Install testing dependencies
         run: |
-          mamba install -c anaconda -c conda-forge --file requirements-conda.txt --file requirements-linting-old.txt six packaging pytest coveralls coverage
+          conda install -c anaconda -c conda-forge --file requirements-conda.txt --file requirements-linting-old.txt six packaging pytest coveralls coverage
       - name: Conda info
         run: |
           conda info
