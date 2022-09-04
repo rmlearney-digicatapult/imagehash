@@ -128,7 +128,7 @@ For single hashes::
 	>>> original_hash = imagehash.average_hash(Image.open('tests/data/imagehash.png'))
 	>>> hash_as_str = str(original_hash)
 	>>> print(hash_as_str)
-	>>> restored_hash = hex_to_hash(hash_as_str)
+	>>> restored_hash = imagehash.hex_to_hash(hash_as_str)
 	>>> print(restored_hash)
 	>>> assert restored_hash == original_hash
 	>>> assert str(restored_hash) == hash_as_str
