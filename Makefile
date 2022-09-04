@@ -58,7 +58,11 @@ clean-doc:
 	rm -rf docs/build
 
 lint: ## check style with flake8
-	flake8 imagehash.py tests
+	flake8 .
+
+lint-fix: ## fix style with autopep8 and isort; ignores to not autofix tabs to spaces, but still warn when mixed
+	autopep8 . --in-place --aggressive --aggressive --aggressive --recursive --ignore=W191,E101,E111,E122
+	isort .
 
 test: ## run tests quickly with the default Python
 	pytest
@@ -86,7 +90,7 @@ servedocs: docs ## compile the docs watching for changes
 	watchmedo shell-command -p '*.rst' -c '$(MAKE) -C docs html' -R -D .
 
 release: dist ## package and upload a release
-	twine upload -s dist/*.tar.gz
+	twine upload -s dist/*.tar.gz dist/*.whl
 
 dist: clean ## builds source and wheel package
 	$(PYTHON) setup.py sdist

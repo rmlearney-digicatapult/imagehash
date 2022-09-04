@@ -1,5 +1,7 @@
 name: Build
 on: [push, pull_request]
+env:
+  CACHE_NUMBER: 0  # increase to reset cache manually
 jobs:
   run-tests:
     name: Run tests
@@ -9,29 +11,72 @@ jobs:
         shell: bash -l {0}
     strategy:
       matrix:
-        python-version: [2.7, 3.5, 3.6, 3.9]
+        python-version: ['2.7', '3.5', '3.6', '3.9.1', '3']
+      fail-fast: false
     steps:
       - uses: actions/checkout@v2
       - uses: conda-incubator/setup-miniconda@v2
         with:
           auto-update-conda: true
           python-version: ${{ matrix.python-version }}
+      - name: Set cache date
+        run: echo "DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
+      - name: Cache
+        id: myconda-cache
+        uses: actions/cache@v3
+        with:
+          path: /usr/share/miniconda/envs/test
+          key: ${{ matrix.python-version }}-conda-${{ hashFiles('requirements*.txt') }}-${{ env.DATE }}-${{ env.CACHE_NUMBER }}
       - name: Install imagemagick
         run: |
           sudo apt-get install -y imagemagick
-      - name: Install testing dependencies
+      # conda does not support environment markers
+      - name: Install testing dependencies (Python 3.6+)
+        if: ${{ !((matrix.python-version == '2.7') || (matrix.python-version == '3.5')) && steps.myconda-cache.outputs.cache-hit != 'true' }}
         run: |
-          conda install -c anaconda --file conda-requirements.txt flake8 packaging pytest coveralls coverage
+          conda install -c anaconda -c conda-forge --file requirements-linting-old.txt coverage-lcov
+      - name: Preinstall dependencies (Python 2.7) from anaconda
+        if: ${{ matrix.python-version == '2.7' && steps.myconda-cache.outputs.cache-hit != 'true' }}
+        run: |
+          conda install -c anaconda --file requirements-linting-anaconda.txt
+      - name: Install testing dependencies
+        if: ${{ steps.myconda-cache.outputs.cache-hit != 'true' }}
+        run: |
+          conda install -c conda-forge -c anaconda --file requirements-conda.txt --file requirements-linting-old.txt six packaging pytest coveralls coverage libstdcxx-ng
       - name: Conda info
         run: |
           conda info
           conda list
       - name: Lint with flake8
-        run: |
-          # stop the build if there are Python syntax errors or undefined names
-          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-          # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-      - run: python setup.py install
+        # stop the build if there are Python syntax errors or undefined names
+        run: flake8 imagehash/ --show-source
+      - name: Test install from setup.py
+        run: pip install .
       - run: coverage run -m pytest .
-      - run: COVERALLS_REPO_TOKEN=mEQ4sldJtlrG3RzjGVD32EYrjUIj4YCV3 coveralls
+      - name: Convert coverage output to lcov for coveralls
+        # coverage-lcov requires python 3.6, so we cannot upload results
+        # from python 2 and 3.5 builds :-(
+        if: ${{ !((matrix.python-version == '2.7') || (matrix.python-version == '3.5')) }}
+        run: |
+          coverage-lcov
+          # make paths relative
+          sed -i s,$PWD/,,g lcov.info
+      - name: prepare coveralls partial upload
+        if: ${{ !((matrix.python-version == '2.7') || (matrix.python-version == '3.5')) }}
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.github_token }}
+          path-to-lcov: lcov.info
+          flag-name: run-${{ matrix.python-version }}
+          parallel: true
+        
+
+  finish:
+    needs: run-tests
+    runs-on: ubuntu-latest
+    steps:
+    - name: Coveralls Finished
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.github_token }}
+        parallel-finished: true

@@ -41,16 +41,16 @@ Basic usage
 
 	>>> from PIL import Image
 	>>> import imagehash
-	>>> hash = imagehash.average_hash(Image.open('test.png'))
+	>>> hash = imagehash.average_hash(Image.open('tests/data/imagehash.png'))
 	>>> print(hash)
-	d879f8f89b1bbf
-	>>> otherhash = imagehash.average_hash(Image.open('other.bmp'))
+	ffd7918181c9ffff
+	>>> otherhash = imagehash.average_hash(Image.open('tests/data/peppers.png'))
 	>>> print(otherhash)
-	ffff3720200ffff
+	9f172786e71f1e00
 	>>> print(hash == otherhash)
 	False
-	>>> print(hash - otherhash)
-	36
+	>>> print(hash - otherhash)  # hamming distance
+	33
 
 Each algorithm can also have its hash size adjusted (or in the case of
 colorhash, its :code:`binbits`). Increasing the hash size allows an
@@ -115,8 +115,40 @@ For understanding hash distances, check out these excellent blog posts:
 * https://tech.okcupid.com/evaluating-perceptual-image-hashes-at-okcupid-e98a3e74aa3a
 * https://content-blockchain.org/research/testing-different-image-hash-functions/
 
+Storage of hashes
+===================
+
+As illustrated above, hashes can be turned into strings.
+The strings can be turned back into a ImageHash object as follows.
+
+For single perceptual hashes::
+
+	>>> original_hash = imagehash.phash(Image.open('tests/data/imagehash.png'))
+	>>> hash_as_str = str(original_hash)
+	>>> print(hash_as_str)
+	ffd7918181c9ffff
+	>>> restored_hash = imagehash.hex_to_hash(hash_as_str)
+	>>> print(restored_hash)
+	ffd7918181c9ffff
+	>>> assert restored_hash == original_hash
+	>>> assert str(restored_hash) == hash_as_str
+
+For colorhash::
+
+	>>> original_hash = imagehash.colorhash(Image.open('tests/data/imagehash.png'), binbits=3)
+	>>> hash_as_str = str(original_hash)
+	>>> restored_hash = imagehash.hex_to_flathash(hash_as_str, hashsize=3)
+
+For storing the hashes in a database and use fast hamming distance
+searches, see pointers at https://github.com/JohannesBuchner/imagehash/issues/127
+(a blog post on how to do this would be a great contribution!)
+
+
+
 Changelog
 ----------
+
+* 4.3: typing annotations by @Avasam @SpangleLabs and @nh2
 
 * 4.2: Cropping-Resistant image hashing added by @joshcoales
 
