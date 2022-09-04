@@ -125,7 +125,7 @@ For single hashes::
 
 	>>> from PIL import Image
 	>>> import imagehash
-	>>> original_hash = imagehash.average_hash(Image.open('test.png'))
+	>>> original_hash = imagehash.average_hash(Image.open('tests/data/imagehash.png'))
 	>>> hash_as_str = str(original_hash)
 	>>> print(hash_as_str)
 	ffd7918181c9ffff
