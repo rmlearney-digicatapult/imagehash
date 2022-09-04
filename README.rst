@@ -115,8 +115,8 @@ For understanding hash distances, check out these excellent blog posts:
 * https://tech.okcupid.com/evaluating-perceptual-image-hashes-at-okcupid-e98a3e74aa3a
 * https://content-blockchain.org/research/testing-different-image-hash-functions/
 
-Storage of hashes
-===================
+Storing hashes
+==============
 
 As illustrated above, hashes can be turned into strings.
 The strings can be turned back into a ImageHash object as follows.
