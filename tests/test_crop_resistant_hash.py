@@ -11,7 +11,7 @@ from .utils import TestImageHash
 class Test(TestImageHash):
 	def setUp(self):
 		self.image = self.get_data_image()
-		self.peppers = self.get_data_image('peppers.jpg')
+		self.peppers = self.get_data_image('peppers.png')
 
 	def test_segmented_hash(self):
 		original_hash = imagehash.crop_resistant_hash(self.image)

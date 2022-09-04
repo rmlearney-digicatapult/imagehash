@@ -36,7 +36,7 @@ def _pillow_has_convert_fix():
 class Test(TestImageHash):
 	def setUp(self):
 		self.image = self.get_data_image()
-		self.peppers = self.get_data_image('peppers.jpg')
+		self.peppers = self.get_data_image('peppers.png')
 
 	def test_average_hash(self):
 		result_hash = imagehash.average_hash(self.image)
