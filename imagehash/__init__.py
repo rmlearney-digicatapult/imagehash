@@ -132,17 +132,22 @@ class ImageHash:
 		return self.hash.size
 
 
-# definition of whash type depends on python version:
-WhashMode = str
-if sys.version_info >= (3, 8):
+# dynamic code for typing
+try:
+	# specify allowed values if possible (py3.8+)
 	from typing import Literal
 	WhashMode = Literal['haar', 'db4']
+except (ImportError, ImportError):
+	WhashMode = str
 
-NDArray = list
-if sys.version_info >= (3, 7):
+try:
+	# enable numpy array typing (py3.7+)
 	import numpy.typing
 	NDArray = numpy.typing.NDArray[numpy.int32]
+except (AttributeError, ImportError):
+	NDArray = list
 
+# type of Callable
 if sys.version_info >= (3, 3):
 	if sys.version_info >= (3, 9, 0) and sys.version_info <= (3, 9, 1):
 		# https://stackoverflow.com/questions/65858528/is-collections-abc-callable-bugged-in-python-3-9-1
