@@ -20,6 +20,13 @@ class Test (TestImageHash):
             imagehash.hex_to_multihash(string),
             emsg
         )
+        string = '0026273b2b19550e,6286373334662535,6636192c47639573,999d6d67a3e82125,27a327c38191a4ad,938971382b328a46'
+        emsg = ('Stringified multihash did not match hardcoded original hash')
+        self.assertEqual(
+            generated_hash,
+            imagehash.hex_to_multihash(string),
+            emsg
+        )
 
 if __name__ == '__main__':
     unittest.main()
