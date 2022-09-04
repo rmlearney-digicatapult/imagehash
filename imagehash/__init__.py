@@ -138,7 +138,7 @@ try:
 	# enable numpy array typing (py3.7+)
 	import numpy.typing
 	NDArray = numpy.typing.NDArray[numpy.int32]
-except AttributeError:
+except (AttributeError, ModuleNotFoundError):
 	NDArray = list
 
 # type of Callable
