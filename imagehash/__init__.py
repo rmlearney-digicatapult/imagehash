@@ -138,10 +138,11 @@ if sys.version_info >= (3, 7):
 	NDArray = numpy.typing.NDArray[numpy.int32]
 
 if sys.version_info >= (3, 3):
-	from six.moves.collections_abc import Callable
 	if sys.version_info >= (3, 9, 0) and sys.version_info <= (3, 9, 1):
 		# https://stackoverflow.com/questions/65858528/is-collections-abc-callable-bugged-in-python-3-9-1
 		from typing import Callable
+	else:
+		from six.moves.collections_abc import Callable
 	try:
 		MeanFunc = Callable[[NDArray], float]
 		HashFunc = Callable[[Image.Image], ImageHash]
