@@ -34,7 +34,7 @@ jobs:
       - name: Install testing dependencies (Python 3.6+)
         if: ${{ !((matrix.python-version == '2.7') || (matrix.python-version == '3.5')) && steps.myconda-cache.outputs.cache-hit != 'true' }}
         run: |
-          conda install -c anaconda -c conda-forge --file requirements-linting-old.txt
+          conda install -c anaconda -c conda-forge --file requirements-linting-old.txt coverage-lcov mypy
       - name: Preinstall dependencies (Python 2.7) from anaconda
         if: ${{ matrix.python-version == '2.7' && steps.myconda-cache.outputs.cache-hit != 'true' }}
         run: |
@@ -51,6 +51,7 @@ jobs:
         # stop the build if there are Python syntax errors or undefined names
         run: flake8 imagehash/ --show-source
       - name: Check typing with mypy
+        if: ${{ !((matrix.python-version == '2.7') || (matrix.python-version == '3.5')) }}
         run: mypy imagehash tests/*.py --follow-imports=silent --ignore-missing-imports
       - name: Test install from setup.py
         run: pip install .

@@ -2,4 +2,3 @@ autopep8
 flake8
 mccabe
 coverage-lcov
-mypy

@@ -111,14 +111,16 @@ class ImageHash:
 		return numpy.count_nonzero(self.hash.flatten() != other.hash.flatten())
 
 	def __eq__(self, other):
+		# type: (object) -> bool
 		if other is None:
 			return False
-		return numpy.array_equal(self.hash.flatten(), other.hash.flatten())
+		return numpy.array_equal(self.hash.flatten(), other.hash.flatten())  # type: ignore
 
 	def __ne__(self, other):
+		# type: (object) -> bool
 		if other is None:
 			return False
-		return not numpy.array_equal(self.hash.flatten(), other.hash.flatten())
+		return not numpy.array_equal(self.hash.flatten(), other.hash.flatten())  # type: ignore
 
 	def __hash__(self):
 		# this returns a 8 bit integer, intentionally shortening the information
