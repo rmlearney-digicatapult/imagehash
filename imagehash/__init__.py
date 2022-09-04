@@ -138,7 +138,7 @@ if sys.version_info >= (3, 7):
 	NDArray = numpy.typing.NDArray[numpy.int32]
 
 if sys.version_info >= (3, 3):
-	from six.collections_abc import Callable
+	from six.moves.collections_abc import Callable
 	MeanFunc = Callable[[NDArray], float]
 	HashFunc = Callable[[Image.Image], ImageHash]
 elif sys.version_info >= (3, 9, 0) and sys.version_info <= (3, 9, 1):
