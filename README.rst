@@ -41,16 +41,16 @@ Basic usage
 
 	>>> from PIL import Image
 	>>> import imagehash
-	>>> hash = imagehash.average_hash(Image.open('test.png'))
+	>>> hash = imagehash.average_hash(Image.open('tests/data/imagehash.png'))
 	>>> print(hash)
-	d879f8f89b1bbf
-	>>> otherhash = imagehash.average_hash(Image.open('other.bmp'))
+	ffd7918181c9ffff
+	>>> otherhash = imagehash.average_hash(Image.open('tests/data/peppers.png'))
 	>>> print(otherhash)
-	ffff3720200ffff
+	9f172786e71f1e00
 	>>> print(hash == otherhash)
 	False
-	>>> print(hash - otherhash)
-	36
+	>>> print(hash - otherhash)  # hamming distance
+	33
 
 Each algorithm can also have its hash size adjusted (or in the case of
 colorhash, its :code:`binbits`). Increasing the hash size allows an
@@ -128,8 +128,10 @@ For single hashes::
 	>>> original_hash = imagehash.average_hash(Image.open('test.png'))
 	>>> hash_as_str = str(original_hash)
 	>>> print(hash_as_str)
+	ffd7918181c9ffff
 	>>> restored_hash = imagehash.hex_to_hash(hash_as_str)
 	>>> print(restored_hash)
+	ffd7918181c9ffff
 	>>> assert restored_hash == original_hash
 	>>> assert str(restored_hash) == hash_as_str
 
