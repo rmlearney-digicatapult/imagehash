@@ -1,5 +1,7 @@
 name: Build
 on: [push, pull_request]
+env:
+  CACHE_NUMBER: 0  # increase to reset cache manually
 jobs:
   run-tests:
     name: Run tests
@@ -17,21 +19,33 @@ jobs:
         with:
           auto-update-conda: true
           python-version: ${{ matrix.python-version }}
+      - name: Set cache date
+        run: echo "DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
+      - uses: actions/cache@v2
+        with:
+          path: ${{ matrix.prefix }}
+          key: ${{ matrix.label }}-${{ matrix.python-version }}-conda-${{ hashFiles('requirements*.txt') }}-${{ env.DATE }}-${{ env.CACHE_NUMBER }}
+        id: cache
       - name: Install imagemagick
         run: |
           sudo apt-get install -y imagemagick
       # conda does not support environment markers
       - name: Install testing dependencies (Python 3.6+)
-        if: ${{ matrix.python-version >= 3.6 || matrix.python-version == '3.9.1'  || matrix.python-version == 3 }}
+        if: |
+          steps.cache.outputs.cache-hit != 'true' &&
+          (${{ matrix.python-version >= 3.6 || matrix.python-version == '3.9.1'  || matrix.python-version == 3 }})
         run: |
-          conda install -c anaconda -c conda-forge --file requirements-linting-old.txt
+          conda install -c anaconda -c conda-forge --file requirements-linting-old.txt coverage-lcov
       - name: Preinstall dependencies (Python 2.7) from anaconda
-        if: ${{ matrix.python-version < 3.6 && matrix.python-version != '3.9.1' && matrix.python-version != 3 }}
+        if: |
+          steps.cache.outputs.cache-hit != 'true' &&
+          (${{ matrix.python-version < 3.6 && matrix.python-version != '3.9.1' && matrix.python-version != 3 }})
         run: |
           conda install -c anaconda --file requirements-linting-anaconda.txt
       - name: Install testing dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
         run: |
-          conda install -c conda-forge -c anaconda --file requirements-conda.txt --file requirements-linting-old.txt six packaging pytest coveralls coverage coverage-lcov libstdcxx-ng
+          conda install -c conda-forge -c anaconda --file requirements-conda.txt --file requirements-linting-old.txt six packaging pytest coveralls coverage libstdcxx-ng
       - name: Conda info
         run: |
           conda info
@@ -41,17 +55,22 @@ jobs:
         run: flake8 . --show-source
       - name: Test install from setup.py
         run: pip install .
-      - run: |
-          coverage run -m pytest .
+      - run: coverage run -m pytest .
+      - name: Convert coverage output to lcov for coveralls
+        # coverage-lcov requires python 3.6, so we cannot upload results
+        # from python 2 and 3.5 builds :-(
+        if: ${{ matrix.python-version >= 3.6 || matrix.python-version == '3.9.1'  || matrix.python-version == 3 }}
+        run: |
           coverage-lcov
           # make paths relative
           sed -i s,$PWD/,,g lcov.info
-      - name: Coveralls Parallel
+      - name: prepare coveralls partial upload
+        if: ${{ matrix.python-version >= 3.6 || matrix.python-version == '3.9.1'  || matrix.python-version == 3 }}
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.github_token }}
           path-to-lcov: lcov.info
-          flag-name: run-${{ matrix.python_version }}
+          flag-name: run-${{ matrix.python-version }}
           parallel: true
         
 
