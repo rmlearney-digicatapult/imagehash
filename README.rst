@@ -41,10 +41,10 @@ Basic usage
 
 	>>> from PIL import Image
 	>>> import imagehash
-	>>> hash = imagehash.average_hash(Image.open('test.png'))
+	>>> hash = imagehash.average_hash(Image.open('tests/data/imagehash.png'))
 	>>> print(hash)
 	d879f8f89b1bbf
-	>>> otherhash = imagehash.average_hash(Image.open('other.bmp'))
+	>>> otherhash = imagehash.average_hash(Image.open('tests/data/peppers.jpg'))
 	>>> print(otherhash)
 	ffff3720200ffff
 	>>> print(hash == otherhash)
@@ -125,7 +125,7 @@ For single hashes::
 
 	>>> from PIL import Image
 	>>> import imagehash
-	>>> original_hash = imagehash.average_hash(Image.open('test.png'))
+	>>> original_hash = imagehash.average_hash(Image.open('tests/data/imagehash.png'))
 	>>> hash_as_str = str(original_hash)
 	>>> print(hash_as_str)
 	>>> restored_hash = hex_to_hash(hash_as_str)
