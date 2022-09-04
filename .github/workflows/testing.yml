@@ -34,7 +34,7 @@ jobs:
       - name: Install testing dependencies (Python 3.6+)
         if: ${{ !((matrix.python-version == '2.7') || (matrix.python-version == '3.5')) && steps.myconda-cache.outputs.cache-hit != 'true' }}
         run: |
-          conda install -c anaconda -c conda-forge --file requirements-linting-old.txt coverage-lcov mypy types-six typed-ast
+          conda install -c anaconda -c conda-forge --file requirements-linting-old.txt coverage-lcov mypy types-six typed-ast libstdcxx-ng
       - name: Preinstall dependencies (Python 2.7) from anaconda
         if: ${{ matrix.python-version == '2.7' && steps.myconda-cache.outputs.cache-hit != 'true' }}
         run: |
@@ -42,7 +42,7 @@ jobs:
       - name: Install testing dependencies
         if: ${{ steps.myconda-cache.outputs.cache-hit != 'true' }}
         run: |
-          conda install -c conda-forge -c anaconda --file requirements-conda.txt --file requirements-linting-old.txt six packaging pytest coveralls coverage libstdcxx-ng
+          conda install -c conda-forge -c anaconda --file requirements-conda.txt --file requirements-linting-old.txt six packaging pytest coveralls coverage
       - name: Conda info
         run: |
           conda info
