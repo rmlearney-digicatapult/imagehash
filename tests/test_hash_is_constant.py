@@ -3,7 +3,7 @@ import hashlib
 import numpy
 import PIL
 from packaging import version
-from PIL import Image, ImageFilter
+from PIL import ImageFilter
 
 import imagehash
 from tests import TestImageHash
@@ -97,7 +97,7 @@ class Test(TestImageHash):
 			known_bw_md5,
 			"This hash should match, unless pillow have changed Convert('L') again"
 		)
-		image = image.resize((300, 300), Image.ANTIALIAS)
+		image = image.resize((300, 300), imagehash.ANTIALIAS)
 		# Add filters
 		image = image.filter(ImageFilter.GaussianBlur()).filter(ImageFilter.MedianFilter())
 		pixels = numpy.array(image).astype(numpy.float32)
