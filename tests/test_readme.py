@@ -2,6 +2,9 @@ import os
 
 
 def test_run():
+	# test code in README.rst file
+	# find any chunks after ::
+	# which code lines, which start with <tab> >>>
 	chunk = None
 	for line in open(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'README.rst')):
 		if not line.startswith('\t') and chunk is not None:
