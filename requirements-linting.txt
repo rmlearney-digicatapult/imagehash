@@ -5,3 +5,4 @@ flake8-isort
 flake8-quotes
 flake8-simplify
 isort
+mccabe
