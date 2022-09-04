@@ -31,7 +31,7 @@ jobs:
           conda install -c anaconda --file requirements-linting-anaconda.txt
       - name: Install testing dependencies
         run: |
-          conda install -c anaconda -c conda-forge --file requirements-conda.txt --file requirements-linting-old.txt six packaging pytest coveralls coverage
+          conda install -c conda-forge -c anaconda --file requirements-conda.txt --file requirements-linting-old.txt six packaging pytest coveralls coverage
       - name: Conda info
         run: |
           conda info

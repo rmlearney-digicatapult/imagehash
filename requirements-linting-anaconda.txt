@@ -2,3 +2,7 @@ autopep8
 flake8
 isort
 mccabe
+pillow
+numpy
+scipy
+pywavelets
