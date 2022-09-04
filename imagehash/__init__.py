@@ -131,14 +131,14 @@ try:
 	# specify allowed values if possible (py3.8+)
 	from typing import Literal
 	WhashMode = Literal['haar', 'db4']
-except (ImportError, ModuleNotFoundError):
+except (ImportError, ImportError):
 	WhashMode = str
 
 try:
 	# enable numpy array typing (py3.7+)
 	import numpy.typing
 	NDArray = numpy.typing.NDArray[numpy.int32]
-except (AttributeError, ModuleNotFoundError):
+except (AttributeError, ImportError):
 	NDArray = list
 
 # type of Callable
