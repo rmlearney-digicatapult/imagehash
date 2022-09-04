@@ -125,6 +125,7 @@ class ImageHash:
 		# Returns the bit length of the hash
 		return self.hash.size
 
+
 # dynamic code for typing
 try:
 	# specify allowed values if possible (py3.8+)
