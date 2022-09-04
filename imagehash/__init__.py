@@ -139,13 +139,15 @@ if sys.version_info >= (3, 7):
 
 if sys.version_info >= (3, 3):
 	from six.moves.collections_abc import Callable
-	MeanFunc = Callable[[NDArray], float]
-	HashFunc = Callable[[Image.Image], ImageHash]
-elif sys.version_info >= (3, 9, 0) and sys.version_info <= (3, 9, 1):
-	# https://stackoverflow.com/questions/65858528/is-collections-abc-callable-bugged-in-python-3-9-1
-	from typing import Callable
-	MeanFunc = Callable[[NDArray], float]
-	HashFunc = Callable[[Image.Image], ImageHash]
+	if sys.version_info >= (3, 9, 0) and sys.version_info <= (3, 9, 1):
+		# https://stackoverflow.com/questions/65858528/is-collections-abc-callable-bugged-in-python-3-9-1
+		from typing import Callable
+	try:
+		MeanFunc = Callable[[NDArray], float]
+		HashFunc = Callable[[Image.Image], ImageHash]
+	except TypeError:
+		MeanFunc = Callable
+		HashFunc = Callable
 # end of dynamic code for typing
 
 
