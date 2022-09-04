@@ -34,7 +34,7 @@ jobs:
       - name: Install testing dependencies (Python 3.6+)
         if: ${{ !((matrix.python-version == '2.7') || (matrix.python-version == '3.5')) && steps.myconda-cache.outputs.cache-hit != 'true' }}
         run: |
-          conda install -c anaconda -c conda-forge --file requirements-linting-old.txt coverage-lcov mypy
+          conda install -c anaconda -c conda-forge --file requirements-linting-old.txt coverage-lcov mypy types-six
       - name: Preinstall dependencies (Python 2.7) from anaconda
         if: ${{ matrix.python-version == '2.7' && steps.myconda-cache.outputs.cache-hit != 'true' }}
         run: |
