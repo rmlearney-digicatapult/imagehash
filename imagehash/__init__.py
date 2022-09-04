@@ -35,6 +35,12 @@ import sys
 
 import numpy
 from PIL import Image, ImageFilter
+try:
+    ANTIALIAS = Image.Resampling.LANCZOS
+except AttributeError:
+	# deprecated in pillow 10
+	# https://pillow.readthedocs.io/en/stable/deprecations.html
+    ANTIALIAS = Image.ANTIALIAS
 
 __version__ = '4.2.1'
 
@@ -217,7 +223,7 @@ def average_hash(image, hash_size=8, mean=numpy.mean):
 		raise ValueError('Hash size must be greater than or equal to 2')
 
 	# reduce size and complexity, then covert to grayscale
-	image = image.convert('L').resize((hash_size, hash_size), Image.ANTIALIAS)
+	image = image.convert('L').resize((hash_size, hash_size), ANTIALIAS)
 
 	# find average pixel value; 'pixels' is an array of the pixel values, ranging from 0 (black) to 255 (white)
 	pixels = numpy.asarray(image)
@@ -243,7 +249,7 @@ def phash(image, hash_size=8, highfreq_factor=4):
 
 	import scipy.fftpack
 	img_size = hash_size * highfreq_factor
-	image = image.convert('L').resize((img_size, img_size), Image.ANTIALIAS)
+	image = image.convert('L').resize((img_size, img_size), ANTIALIAS)
 	pixels = numpy.asarray(image)
 	dct = scipy.fftpack.dct(scipy.fftpack.dct(pixels, axis=0), axis=1)
 	dctlowfreq = dct[:hash_size, :hash_size]
@@ -263,7 +269,7 @@ def phash_simple(image, hash_size=8, highfreq_factor=4):
 	"""
 	import scipy.fftpack
 	img_size = hash_size * highfreq_factor
-	image = image.convert('L').resize((img_size, img_size), Image.ANTIALIAS)
+	image = image.convert('L').resize((img_size, img_size), ANTIALIAS)
 	pixels = numpy.asarray(image)
 	dct = scipy.fftpack.dct(pixels)
 	dctlowfreq = dct[:hash_size, 1:hash_size + 1]
@@ -287,7 +293,7 @@ def dhash(image, hash_size=8):
 	if hash_size < 2:
 		raise ValueError('Hash size must be greater than or equal to 2')
 
-	image = image.convert('L').resize((hash_size + 1, hash_size), Image.ANTIALIAS)
+	image = image.convert('L').resize((hash_size + 1, hash_size), ANTIALIAS)
 	pixels = numpy.asarray(image)
 	# compute differences between columns
 	diff = pixels[:, 1:] > pixels[:, :-1]
@@ -306,7 +312,7 @@ def dhash_vertical(image, hash_size=8):
 	@image must be a PIL instance.
 	"""
 	# resize(w, h), but numpy.array((h, w))
-	image = image.convert('L').resize((hash_size, hash_size + 1), Image.ANTIALIAS)
+	image = image.convert('L').resize((hash_size, hash_size + 1), ANTIALIAS)
 	pixels = numpy.asarray(image)
 	# compute differences between rows
 	diff = pixels[1:, :] > pixels[:-1, :]
@@ -343,7 +349,7 @@ def whash(image, hash_size=8, image_scale=None, mode='haar', remove_max_haar_ll=
 	assert level <= ll_max_level, 'hash_size in a wrong range'
 	dwt_level = ll_max_level - level
 
-	image = image.convert('L').resize((image_scale, image_scale), Image.ANTIALIAS)
+	image = image.convert('L').resize((image_scale, image_scale), ANTIALIAS)
 	pixels = numpy.asarray(image) / 255.
 
 	# Remove low level frequency LL(max_ll) if @remove_max_haar_ll using haar filter
@@ -636,7 +642,7 @@ def crop_resistant_hash(
 
 	orig_image = image.copy()
 	# Convert to gray scale and resize
-	image = image.convert('L').resize((segmentation_image_size, segmentation_image_size), Image.ANTIALIAS)
+	image = image.convert('L').resize((segmentation_image_size, segmentation_image_size), ANTIALIAS)
 	# Add filters
 	image = image.filter(ImageFilter.GaussianBlur()).filter(ImageFilter.MedianFilter())
 	pixels = numpy.array(image).astype(numpy.float32)
