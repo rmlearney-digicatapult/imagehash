@@ -115,8 +115,34 @@ For understanding hash distances, check out these excellent blog posts:
 * https://tech.okcupid.com/evaluating-perceptual-image-hashes-at-okcupid-e98a3e74aa3a
 * https://content-blockchain.org/research/testing-different-image-hash-functions/
 
+Storage of hashes
+===================
+
+As illustrated above, hashes can be turned into strings.
+The strings can be turned back into a ImageHash object as follows.
+
+For single hashes::
+
+	>>> from PIL import Image
+	>>> import imagehash
+	>>> original_hash = imagehash.average_hash(Image.open('test.png'))
+	>>> hash_as_str = str(original_hash)
+	>>> print(hash_as_str)
+	>>> restored_hash = hex_to_hash(hash_as_str)
+	>>> print(restored_hash)
+	>>> assert restored_hash == original_hash
+	>>> assert str(restored_hash) == hash_as_str
+
+For storing the hashes in a database and use fast hamming distance
+searches, see pointers at https://github.com/JohannesBuchner/imagehash/issues/127
+(a blog post on how to do this would be a great contribution!)
+
+
+
 Changelog
 ----------
+
+* 4.3: typing annotations by @Avasam @SpangleLabs and @nh2
 
 * 4.2: Cropping-Resistant image hashing added by @joshcoales
 

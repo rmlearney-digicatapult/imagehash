@@ -1,6 +1,5 @@
 """
-Image hashing library
-======================
+Perceptual image hashing library
 
 Example:
 
@@ -36,11 +35,11 @@ import sys
 import numpy
 from PIL import Image, ImageFilter
 try:
-    ANTIALIAS = Image.Resampling.LANCZOS
+	ANTIALIAS = Image.Resampling.LANCZOS
 except AttributeError:
 	# deprecated in pillow 10
 	# https://pillow.readthedocs.io/en/stable/deprecations.html
-    ANTIALIAS = Image.ANTIALIAS
+	ANTIALIAS = Image.ANTIALIAS
 
 __version__ = '4.2.1'
 
