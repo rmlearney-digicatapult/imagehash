@@ -194,10 +194,10 @@ def hex_to_multihash(hexstr):
 	# type: (str) -> ImageMultiHash
 	"""
 	Convert a stored multihash (hex, as retrieved from str(ImageMultiHash))
-	back to an ImageMultiHash object. 
-	
+	back to an ImageMultiHash object.
+
 	This function is based on hex_to_hash so the same caveats apply. Namely:
-	
+
 	1. This algorithm assumes all hashes are either
 			bidimensional arrays with dimensions hash_size * hash_size,
 			or onedimensional arrays with dimensions binbits * 14.
