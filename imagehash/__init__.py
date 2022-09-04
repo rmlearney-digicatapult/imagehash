@@ -131,7 +131,7 @@ try:
 	# specify allowed values if possible (py3.8+)
 	from typing import Literal
 	WhashMode = Literal['haar', 'db4']
-except ImportError:
+except ImportError, ModuleNotFoundError:
 	WhashMode = str
 
 try:
