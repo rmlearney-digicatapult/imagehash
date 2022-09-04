@@ -1,4 +1,5 @@
 import os
+import six
 
 
 def test_run():
@@ -12,7 +13,7 @@ def test_run():
 			if len(chunk) > 0:
 				code = ''.join(chunk)
 				print("running::\n" + code)
-				print("result:", exec(code, {}, {}))
+				print("result:", six.exec_(code, {}, {}))
 				chunk = None
 		elif line.endswith('::\n'):
 			# print("start of code segment:", line)
