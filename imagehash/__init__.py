@@ -136,7 +136,7 @@ try:
 	# specify allowed values if possible (py3.8+)
 	from typing import Literal
 	WhashMode = Literal['haar', 'db4']  # type: ignore
-except (ImportError, ImportError):
+except ImportError:
 	WhashMode = str  # type: ignore
 
 try:
@@ -152,7 +152,7 @@ if sys.version_info >= (3, 3):
 		# https://stackoverflow.com/questions/65858528/is-collections-abc-callable-bugged-in-python-3-9-1
 		from typing import Callable
 	else:
-		from six.moves.collections_abc import Callable
+		from collections.abc import Callable
 	try:
 		MeanFunc = Callable[[NDArray], float]
 		HashFunc = Callable[[Image.Image], ImageHash]
