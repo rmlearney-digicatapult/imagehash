@@ -32,17 +32,7 @@ jobs:
           sudo apt-get install -y imagemagick libstdc++6
       # conda does not support environment markers
       - name: fix libstdc++
-        run: |
-          echo 1
-          ls /usr/lib/x86_64-linux-gnu/*stdc* || true
-          echo 2
-          ls /usr/lib64/*stdc* || true
-          echo 3
-          ls /usr/local/lib64/*stdc* || true
-          echo 4
-          ls /usr/share/miniconda/envs/test/lib/
-          echo "linking..."
-          ln -sf /usr/lib/x86_64-linux-gnu/libstdc++.so.6 /usr/share/miniconda/envs/test/lib/libstdc++.so.6
+        run: ln -sf /usr/lib/x86_64-linux-gnu/libstdc++.so.6 /usr/share/miniconda/envs/test/lib/libstdc++.so.6
       - name: Install testing dependencies (Python 3.6+)
         if: ${{ !((matrix.python-version == '2.7') || (matrix.python-version == '3.5')) && steps.myconda-cache.outputs.cache-hit != 'true' }}
         run: |
