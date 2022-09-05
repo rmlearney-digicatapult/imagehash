@@ -20,13 +20,13 @@ jobs:
           auto-update-conda: true
           python-version: ${{ matrix.python-version }}
       - name: Set cache date
-        run: echo "DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
+        run: echo "DATE=$(date +'%Y%m')" >> $GITHUB_ENV
       - name: Conda download cache
         id: myconda-download-cache
         uses: actions/cache@v3
         with:
           path: /usr/share/miniconda/pkgs/
-          key: ${{ matrix.python-version }}-conda-${{ hashFiles('requirements*.txt') }}-${{ env.DATE }}-${{ env.CACHE_NUMBER }}
+          key: ${{ matrix.python-version }}-conda-${{ env.DATE }}-${{ env.CACHE_NUMBER }}
       - name: Install imagemagick
         run: |
           sudo apt-get install -y imagemagick libstdc++6
