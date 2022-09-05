@@ -133,13 +133,21 @@ For single perceptual hashes::
 	>>> assert restored_hash == original_hash
 	>>> assert str(restored_hash) == hash_as_str
 
+For crop_resistant_hash::
+
+	>>> original_hash = imagehash.crop_resistant_hash(Image.open('tests/data/imagehash.png'), min_segment_size=500, segmentation_image_size=1000)
+	>>> hash_as_str = str(original_hash)
+	>>> restored_hash = imagehash.hex_to_multihash(hash_as_str)
+	>>> assert restored_hash == original_hash
+	>>> assert str(restored_hash) == hash_as_str
+
 For colorhash::
 
 	>>> original_hash = imagehash.colorhash(Image.open('tests/data/imagehash.png'), binbits=3)
 	>>> hash_as_str = str(original_hash)
 	>>> restored_hash = imagehash.hex_to_flathash(hash_as_str, hashsize=3)
 
-For storing the hashes in a database and use fast hamming distance
+For storing the hashes in a database and using fast hamming distance
 searches, see pointers at https://github.com/JohannesBuchner/imagehash/issues/127
 (a blog post on how to do this would be a great contribution!)
 
