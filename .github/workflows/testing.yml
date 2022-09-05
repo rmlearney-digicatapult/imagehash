@@ -1,7 +1,5 @@
 name: Build
 on: [push, pull_request]
-env:
-  CACHE_NUMBER: 2  # increase to reset cache manually
 jobs:
   run-tests:
     name: Run tests
@@ -19,14 +17,6 @@ jobs:
         with:
           auto-update-conda: true
           python-version: ${{ matrix.python-version }}
-      - name: Set cache date
-        run: echo "DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
-      - name: Cache
-        id: myconda-cache
-        uses: actions/cache@v3
-        with:
-          path: /usr/share/miniconda/envs/test
-          key: ${{ matrix.python-version }}-conda-${{ hashFiles('requirements*.txt') }}-${{ env.DATE }}-${{ env.CACHE_NUMBER }}
       - name: Install imagemagick
         run: |
           sudo apt-get install -y imagemagick libstdc++6
@@ -34,11 +24,11 @@ jobs:
       - name: fix libstdc++ for scipy install
         run: ln -sf /usr/lib/x86_64-linux-gnu/libstdc++.so.6 /usr/share/miniconda/envs/test/lib/libstdc++.so.6
       - name: Install testing dependencies (Python 3.6+)
-        if: ${{ !((matrix.python-version == '2.7') || (matrix.python-version == '3.5')) && steps.myconda-cache.outputs.cache-hit != 'true' }}
+        if: ${{ !((matrix.python-version == '2.7') || (matrix.python-version == '3.5')) }}
         run: |
           conda install -c anaconda -c conda-forge --file requirements-linting-old.txt coverage-lcov mypy types-six typed-ast
       - name: Preinstall dependencies (Python 2.7) from anaconda
-        if: ${{ matrix.python-version == '2.7' && steps.myconda-cache.outputs.cache-hit != 'true' }}
+        if: ${{ matrix.python-version == '2.7' }}
         run: |
           conda install -c anaconda --file requirements-linting-anaconda.txt
       - name: Install testing dependencies
