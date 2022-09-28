@@ -41,7 +41,7 @@ except AttributeError:
 	# https://pillow.readthedocs.io/en/stable/deprecations.html
 	ANTIALIAS = Image.ANTIALIAS
 
-__version__ = '4.3.0'
+__version__ = '4.3.1'
 
 """
 You may copy this file, if you keep the copyright information below:
