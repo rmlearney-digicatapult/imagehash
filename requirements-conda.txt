@@ -2,4 +2,3 @@ pillow
 numpy
 scipy
 pywavelets
-six
