@@ -185,7 +185,7 @@ If you encounter a bug or have a question, please open a GitHub issue. You can a
 Other projects
 ==============
 
-* https://web.archive.org/web/20210827144701/http://blockhash.io/
+* https://github.com/commonsmachinery/blockhash-python
 * https://github.com/acoomans/instagram-filters
 * https://pippy360.github.io/transformationInvariantImageSearch/
 * https://www.phash.org/
