@@ -34,7 +34,7 @@ jobs:
           key: ${{ matrix.python-version }}-conda-${{ env.DATE }}-${{ env.CACHE_NUMBER }}
       - name: Install imagemagick
         run: |
-          sudo apt-get install -y imagemagick libstdc++6
+          sudo apt-get install -y imagemagick libstdc++6 || true
       # conda does not support environment markers
       - name: fix libstdc++ for scipy install
         run: ln -sf /usr/lib/x86_64-linux-gnu/libstdc++.so.6 /usr/share/miniconda/envs/test/lib/libstdc++.so.6
