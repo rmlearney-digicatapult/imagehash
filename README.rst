@@ -164,7 +164,7 @@ Changelog
 
 * 4.3: typing annotations by @Avasam @SpangleLabs and @nh2
 
-* 4.2: Cropping-Resistant image hashing added by @joshcoales
+* 4.2: Cropping-Resistant image hashing added by @SpangleLabs
 
 * 4.1: Add examples and colorhash
 
