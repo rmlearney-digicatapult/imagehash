@@ -244,7 +244,7 @@ def average_hash(image, hash_size=8, mean=numpy.mean):
 	if hash_size < 2:
 		raise ValueError('Hash size must be greater than or equal to 2')
 
-	# reduce size and complexity, then covert to grayscale
+	# reduce size and complexity, then convert to grayscale
 	image = image.convert('L').resize((hash_size, hash_size), ANTIALIAS)
 
 	# find average pixel value; 'pixels' is an array of the pixel values, ranging from 0 (black) to 255 (white)
@@ -385,7 +385,7 @@ def whash(image, hash_size=8, image_scale=None, mode='haar', remove_max_haar_ll=
 	coeffs = pywt.wavedec2(pixels, mode, level=dwt_level)
 	dwt_low = coeffs[0]
 
-	# Substract median and compute hash
+	# Subtract median and compute hash
 	med = numpy.median(dwt_low)
 	diff = dwt_low > med
 	return ImageHash(diff)
@@ -655,7 +655,7 @@ def crop_resistant_hash(
 	:param hash_func: The hashing function to use
 	:param limit_segments: If you have storage requirements, you can limit to hashing only the M largest segments
 	:param segment_threshold: Brightness threshold between hills and valleys. This should be static, putting it between
-	peak and trough dynamically breaks the matching
+	peak and through dynamically breaks the matching
 	:param min_segment_size: Minimum number of pixels for a hashable segment
 	:param segmentation_image_size: Size which the image is resized to before segmentation
 	"""
