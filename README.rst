@@ -71,9 +71,9 @@ References
 * Wavelet hashing (`wHashref`_)
 * Crop-resistant hashing (`crop_resistant_hashref`_)
 
-.. _aHashref: http://www.hackerfactor.com/blog/index.php?/archives/432-Looks-Like-It.html
-.. _pHashref: http://www.hackerfactor.com/blog/index.php?/archives/432-Looks-Like-It.html
-.. _dHashref: http://www.hackerfactor.com/blog/index.php?/archives/529-Kind-of-Like-That.html
+.. _aHashref: https://www.hackerfactor.com/blog/index.php?/archives/432-Looks-Like-It.html
+.. _pHashref: https://www.hackerfactor.com/blog/index.php?/archives/432-Looks-Like-It.html
+.. _dHashref: https://www.hackerfactor.com/blog/index.php?/archives/529-Kind-of-Like-That.html
 .. _wHashref: https://fullstackml.com/2016/07/02/wavelet-image-hash-in-python/
 .. _pypi: https://pypi.python.org/pypi/ImageHash
 .. _crop_resistant_hashref: https://ieeexplore.ieee.org/document/6980335
@@ -102,7 +102,7 @@ You may want to adjust the hashsize or require some manhattan distance (hash1 - 
 Example 2: Art dataset
 ----------------------
 
-Source: 109259 art pieces from http://parismuseescollections.paris.fr/en/recherche/image-libre/.
+Source: 109259 art pieces from https://www.parismuseescollections.paris.fr/en/recherche/image-libre/.
 
 The following pages show groups of images with the same hash (the hashing method sees them as the same).
 
