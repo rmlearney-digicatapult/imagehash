@@ -234,7 +234,7 @@ def average_hash(image, hash_size=8, mean=numpy.mean):
 	"""
 	Average Hash computation
 
-	Implementation follows http://www.hackerfactor.com/blog/index.php?/archives/432-Looks-Like-It.html
+	Implementation follows https://www.hackerfactor.com/blog/index.php?/archives/432-Looks-Like-It.html
 
 	Step by step explanation: https://web.archive.org/web/20171112054354/https://www.safaribooksonline.com/blog/2013/11/26/image-hashing-with-python/ # noqa: E501
 
@@ -262,7 +262,7 @@ def phash(image, hash_size=8, highfreq_factor=4):
 	"""
 	Perceptual Hash computation.
 
-	Implementation follows http://www.hackerfactor.com/blog/index.php?/archives/432-Looks-Like-It.html
+	Implementation follows https://www.hackerfactor.com/blog/index.php?/archives/432-Looks-Like-It.html
 
 	@image must be a PIL instance.
 	"""
@@ -285,7 +285,7 @@ def phash_simple(image, hash_size=8, highfreq_factor=4):
 	"""
 	Perceptual Hash computation.
 
-	Implementation follows http://www.hackerfactor.com/blog/index.php?/archives/432-Looks-Like-It.html
+	Implementation follows https://www.hackerfactor.com/blog/index.php?/archives/432-Looks-Like-It.html
 
 	@image must be a PIL instance.
 	"""
@@ -305,7 +305,7 @@ def dhash(image, hash_size=8):
 	"""
 	Difference Hash computation.
 
-	following http://www.hackerfactor.com/blog/index.php?/archives/529-Kind-of-Like-That.html
+	following https://www.hackerfactor.com/blog/index.php?/archives/529-Kind-of-Like-That.html
 
 	computes differences horizontally
 
@@ -327,7 +327,7 @@ def dhash_vertical(image, hash_size=8):
 	"""
 	Difference Hash computation.
 
-	following http://www.hackerfactor.com/blog/index.php?/archives/529-Kind-of-Like-That.html
+	following https://www.hackerfactor.com/blog/index.php?/archives/529-Kind-of-Like-That.html
 
 	computes differences vertically
 
