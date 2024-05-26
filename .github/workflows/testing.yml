@@ -28,7 +28,7 @@ jobs:
         run: echo "DATE=$(date +'%Y%m')" >> $GITHUB_ENV
       - name: Conda download cache
         id: myconda-download-cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: /usr/share/miniconda/pkgs/
           key: ${{ matrix.python-version }}-conda-${{ env.DATE }}-${{ env.CACHE_NUMBER }}

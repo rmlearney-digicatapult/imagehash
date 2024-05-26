@@ -34,6 +34,7 @@ import sys
 
 import numpy
 from PIL import Image, ImageFilter
+
 try:
 	ANTIALIAS = Image.Resampling.LANCZOS
 except AttributeError:
@@ -635,7 +636,7 @@ def _find_all_segments(pixels, segment_threshold, min_segment_size):
 
 def crop_resistant_hash(
 	image,  # type: Image.Image
-	hash_func=None,  # type: HashFunc
+	hash_func=dhash,  # type: HashFunc
 	limit_segments=None,  # type: int | None
 	segment_threshold=128,  # type: int
 	min_segment_size=500,  # type: int
@@ -659,8 +660,6 @@ def crop_resistant_hash(
 	:param min_segment_size: Minimum number of pixels for a hashable segment
 	:param segmentation_image_size: Size which the image is resized to before segmentation
 	"""
-	if hash_func is None:
-		hash_func = dhash
 
 	orig_image = image.copy()
 	# Convert to gray scale and resize
