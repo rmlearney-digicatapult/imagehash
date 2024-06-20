@@ -41,7 +41,7 @@ jobs:
       - name: Install testing dependencies
         run: |
           conda install -c conda-forge --file requirements-conda.txt --file requirements-linting-old.txt six packaging pytest coveralls coverage libstdcxx-ng
-          pip install git+https://github.com/JohannesBuchner/coverage-lcov
+          pip install git+https://github.com/JohannesBuchner/coverage-lcov@feature-coverage7
       - name: Conda info
         run: |
           conda info
