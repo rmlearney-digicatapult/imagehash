@@ -3,7 +3,7 @@ from PIL import Image, ImageFilter
 
 import imagehash
 
-IMAGE_FILE = '../tests/data/peppers.png'
+IMAGE_FILE = './examples/mrbean.png'
 IMG_SIZE = 300
 SEGMENT_THRESHOLD = 128
 MIN_SEGMENT_SIZE = 500
@@ -24,7 +24,7 @@ RAINBOW = [
 full_image = Image.open(IMAGE_FILE)
 width, height = full_image.size
 # Image pre-processing
-image = full_image.convert('L').resize((IMG_SIZE, IMG_SIZE), Image.ANTIALIAS)
+image = full_image.convert('L').resize((IMG_SIZE, IMG_SIZE), Image.Resampling.LANCZOS)
 # Add filters
 image = image.filter(ImageFilter.GaussianBlur()).filter(ImageFilter.MedianFilter())
 pixels = numpy.array(image).astype(numpy.float32)

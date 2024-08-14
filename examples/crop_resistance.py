@@ -5,7 +5,7 @@ import imagehash
 SAVE_IMAGES = False
 
 # Load image
-full_image = Image.open('../tests/data/peppers.png')
+full_image = Image.open('./examples/mrbean.png')
 width, height = full_image.size
 # Hash it
 full_hash = imagehash.crop_resistant_hash(full_image)
