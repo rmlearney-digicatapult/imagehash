@@ -1,6 +1,6 @@
 *~
 *.pyc
-env
+.venv
 *.jpg
 build
 dist
